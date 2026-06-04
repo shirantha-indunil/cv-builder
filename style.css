@@ -1,0 +1,3082 @@
+/* ==========================================================================
+   PREMIUM RESUME BUILDER DESIGN SYSTEM & CSS STYLES
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Theme Variables & Reset
+   -------------------------------------------------------------------------- */
+:root {
+  /* Workspace UI colors */
+  --bg-dark: #121316;
+  --bg-card: #1c1d21;
+  --bg-input: #26282e;
+  --border-ui: #33363f;
+  --text-ui: #e2e8f0;
+  --text-muted: #94a3b8;
+  
+  /* Resume colors (Dynamically overwritten by script if custom color selected) */
+  --primary-color: #2d527c;
+  --sidebar-bg: #ebf0f5;
+  --resume-text-dark: #000000;
+  --resume-text-light: #000000;
+  --resume-divider: #cbd5e1;
+
+  /* Global Fonts */
+  --font-ui: 'Inter', sans-serif;
+  --font-resume: 'Arial MT', Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Helper Utilities */
+.hidden {
+  display: none !important;
+}
+
+body {
+  font-family: var(--font-ui);
+  background-color: var(--bg-dark);
+  color: var(--text-ui);
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollbars for dark UI */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-ui);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* --------------------------------------------------------------------------
+   2. App Header
+   -------------------------------------------------------------------------- */
+.app-header {
+  height: 70px;
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-ui);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.back-btn {
+  color: var(--text-ui);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-ui);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.back-btn:hover {
+  background-color: #2e313a;
+  border-color: #4b5161;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.editable-title {
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed transparent;
+  color: var(--text-ui);
+  font-size: 18px;
+  font-weight: 600;
+  font-family: var(--font-ui);
+  padding: 2px 0;
+  width: 200px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.editable-title:focus {
+  border-color: var(--text-muted);
+}
+
+.save-status {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.save-status i {
+  font-size: 10px;
+  color: #10b981;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.history-controls {
+  display: flex;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-ui);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ctrl-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-ui);
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.ctrl-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+}
+.ctrl-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-ui);
+  border-radius: 8px;
+  padding: 0 12px;
+  height: 40px;
+}
+.language-selector i {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.language-selector select {
+  background: transparent;
+  border: none;
+  color: var(--text-ui);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+}
+
+.btn-primary, .btn-secondary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-ui);
+}
+
+.btn-primary {
+  background-color: #6366f1;
+  border: none;
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #4f46e5;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-ui);
+  color: var(--text-ui);
+}
+.btn-secondary:hover {
+  background-color: #2e313a;
+  border-color: #4b5161;
+}
+
+/* --------------------------------------------------------------------------
+   3. Workspace Layout
+   -------------------------------------------------------------------------- */
+.workspace {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  height: calc(100vh - 70px);
+}
+
+/* --------------------------------------------------------------------------
+   4. Left Editor Panel
+   -------------------------------------------------------------------------- */
+.editor-panel {
+  width: 45%;
+  min-width: 480px;
+  max-width: 600px;
+  background-color: var(--bg-card);
+  border-right: 1px solid var(--border-ui);
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Multi-page controller toggle container */
+.layout-toggle-container {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-ui);
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Quick Actions Cards */
+.import-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.import-card {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-ui);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.import-card:hover {
+  border-color: #6366f1;
+  background-color: rgba(99, 102, 241, 0.05);
+  transform: translateY(-2px);
+}
+.import-card i {
+  font-size: 20px;
+  color: #818cf8;
+}
+.import-card h4 {
+  font-size: 11px;
+  font-weight: 600;
+}
+.import-card p {
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+/* Accordion Form styling */
+.form-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.accordion-item {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-ui);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.accordion-item:hover {
+  border-color: #475569;
+}
+.accordion-item.active {
+  border-color: #6366f1;
+}
+
+.accordion-header {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  background-color: rgba(255, 255, 255, 0.01);
+}
+.accordion-header h3 {
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.accordion-header h3 i {
+  color: #818cf8;
+}
+.toggle-icon {
+  font-size: 12px;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+
+.accordion-content {
+  padding: 0 20px 20px 20px;
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  padding-top: 18px;
+}
+.accordion-item.active .accordion-content {
+  display: flex;
+}
+
+.section-help {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Inputs & Form Groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+.form-group label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.form-group label i {
+  font-size: 12px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+select,
+textarea {
+  width: 100%;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-ui);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: var(--font-ui);
+  color: var(--text-ui);
+  font-size: 13.5px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* Personal Details Grid (Left Photo, Right Inputs) */
+.personal-grid {
+  display: flex;
+  gap: 20px;
+}
+
+.photo-upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.photo-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.photo-dropzone {
+  width: 110px;
+  height: 110px;
+  border: 2px dashed var(--border-ui);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s;
+  background-color: var(--bg-card);
+}
+.photo-dropzone:hover {
+  border-color: #6366f1;
+  background-color: rgba(99, 102, 241, 0.02);
+}
+.dropzone-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 10px;
+}
+.dropzone-placeholder i {
+  font-size: 20px;
+}
+.dropzone-placeholder span {
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.photo-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remove-photo-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background-color: rgba(239, 68, 68, 0.9);
+  color: white;
+  border: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 10px;
+  z-index: 5;
+  transition: background 0.2s;
+}
+.remove-photo-btn:hover {
+  background-color: rgba(220, 38, 38, 1);
+}
+
+.personal-inputs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.job-headline-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.job-headline-row input {
+  flex: 1;
+}
+
+/* Premium toggle switch */
+.toggle-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+  background-color: var(--border-ui);
+  transition: .2s;
+  border-radius: 20px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .2s;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: #6366f1;
+}
+input:checked + .slider:before {
+  transform: translateX(14px);
+}
+.toggle-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: none !important;
+  letter-spacing: 0px !important;
+}
+
+/* Dynamic Addable Items */
+.dynamic-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dynamic-item-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-ui);
+  border-radius: 10px;
+  padding: 16px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: slideDown 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-actions {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  gap: 8px;
+}
+
+.btn-delete-item {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+.btn-delete-item:hover {
+  color: #ef4444;
+}
+
+.btn-add-item {
+  width: 100%;
+  background: transparent;
+  border: 1px dashed var(--border-ui);
+  color: #818cf8;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+  transition: all 0.2s;
+}
+.btn-add-item:hover {
+  border-color: #818cf8;
+  background-color: rgba(129, 140, 248, 0.03);
+}
+
+/* Bullet item list in dynamic lists */
+.bullet-list-builder {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.bullet-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.bullet-row input {
+  flex: 1;
+}
+
+/* Skills tag styling */
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 0;
+}
+.skill-tag {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-ui);
+  color: var(--text-ui);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.skill-tag i {
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: color 0.2s;
+}
+.skill-tag i:hover {
+  color: #ef4444;
+}
+
+.inline-adder {
+  margin-top: 6px;
+  gap: 8px !important;
+}
+.btn-small-add {
+  background-color: #6366f1;
+  color: white;
+  border: none;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-small-add:hover {
+  background-color: #4f46e5;
+}
+
+/* Language Dynamic Row */
+.lang-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.lang-row .form-group {
+  flex: 1;
+}
+.star-rating-selector {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+}
+.rating-circle-btn {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--border-ui);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.rating-circle-btn.active {
+  background-color: #818cf8;
+  border-color: #818cf8;
+}
+
+/* --------------------------------------------------------------------------
+   5. Right Live Preview Panel
+   -------------------------------------------------------------------------- */
+.preview-panel {
+  flex: 1;
+  background-color: var(--bg-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: auto;
+  position: relative;
+  padding: 40px 20px 100px 20px;
+}
+
+/* A4 Sheet Dimensions Mapping */
+.a4-wrapper {
+  transform-origin: top center;
+  transition: transform 0.2s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
+}
+
+.a4-pages-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* Gap between pages inside the editor preview space */
+}
+
+.a4-page {
+  width: 210mm;
+  height: 297mm;
+  background-color: white;
+  color: var(--resume-text-dark);
+  font-family: var(--font-resume);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  page-break-after: always;
+}
+
+.a4-page.hidden {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. Reference-Matched Resume Structure
+   -------------------------------------------------------------------------- */
+.resume-container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+/* Left Sidebar Column - Keep overflow visible to let profiles and footer curves overlay */
+.resume-sidebar {
+  width: 34%;
+  background-color: var(--sidebar-bg);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
+  z-index: 5; /* Pulls sidebar layers on top of main column white bounds */
+}
+
+/* Curved Header Block - Shorter height, padding-top centers name above photo */
+.sidebar-header-curve {
+  position: relative;
+  height: 215px;
+  width: 100%;
+  background-color: var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  padding-top: 40px; /* Bring the name slightly down to prevent crowding at the top */
+  box-sizing: border-box;
+  z-index: 1;
+  flex-shrink: 0; /* Guarantee strict height preservation under flex column pressure */
+}
+
+.curved-bg {
+  position: absolute;
+  bottom: -1px; /* Overlap slightly to prevent subpixel line gaps */
+  left: 0;
+  width: 100%;
+  height: 60px; /* Height of the curve shape */
+  z-index: 2;
+  pointer-events: none; /* Let clicks pass through if needed */
+}
+
+.name-headline-block {
+  width: 90%;
+  padding: 0 10px;
+  position: relative;
+  z-index: 3; /* Render text above overlay curve */
+}
+
+.candidate-name {
+  font-size: 20px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: white;
+  margin-bottom: 2px;
+  line-height: 1.2;
+  white-space: nowrap; /* Guarantee the candidate name strictly stays on one line */
+}
+
+.candidate-headline {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 4px;
+}
+
+/* Profile image wrapper (Z-indexed overlay) */
+.sidebar-photo-wrapper {
+  position: relative;
+  height: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+}
+
+.circular-photo-container {
+  position: absolute;
+  top: -110px; /* Center circle perfectly overlaying the gentle curve base */
+  width: 210px; 
+  height: 210px;
+  border-radius: 50%;
+  border: 5px solid white;
+  background-color: #cbd5e1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12); /* Softer premium shadow matching screenshot */
+}
+
+.circular-photo-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-placeholder-icon {
+  font-size: 75px;
+  color: #94a3b8;
+}
+
+/* Sidebar Inner Content (Gray panel) */
+.sidebar-body {
+  flex: 1;
+  padding: 125px 24px 24px 24px; /* Perfectly adapted top padding to fix start lower down from the photo */
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  box-sizing: border-box;
+}
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Section divider header */
+.sidebar-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #4a6b82; /* Muted primary tone */
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid var(--resume-divider);
+  letter-spacing: 0.3px;
+}
+
+.personal-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 10.5px;
+  line-height: 1.4;
+  color: var(--resume-text-dark);
+}
+
+.detail-icon {
+  font-size: 12px;
+  color: #4a6b82;
+  margin-top: 2px;
+  width: 14px;
+  text-align: center;
+}
+
+.detail-text {
+  flex: 1;
+  word-break: break-word;
+}
+
+/* Skill bullet points in sidebar */
+.skills-list-bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+}
+.skills-list-bullets li {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--resume-text-dark);
+  position: relative;
+  padding-left: 0px;
+}
+
+/* Language Dots rating elements */
+.languages-preview-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.lang-preview-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.lang-name {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--resume-text-dark);
+}
+.rating-dots {
+  display: flex;
+  gap: 4px;
+}
+.rating-dots .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--resume-divider);
+}
+.rating-dots .dot.active {
+  background-color: var(--primary-color);
+}
+
+/* Hobbies square bullets matching screenshot */
+.hobbies-list-bullets {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+}
+.hobbies-list-bullets li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--resume-text-dark);
+}
+.hobbies-list-bullets li::before {
+  content: "■";
+  color: var(--primary-color);
+  font-size: 8px;
+  position: absolute;
+  left: 0;
+  top: 1px;
+}
+
+/* Page 2 Bottom sidebar curve - Spans exactly 100% of sidebar width, sitting flush with the right boundary */
+.sidebar-footer-curve {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%; /* Restricts curve to exactly 100% of sidebar width, preventing spill into white main column */
+  height: 60px;
+  z-index: 10;
+}
+
+.sidebar-footer-curve svg path {
+  fill: var(--primary-color);
+}
+
+/* Right Main Column */
+.resume-main {
+  width: 66%;
+  height: 100%;
+  padding: 40px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  box-sizing: border-box;
+}
+
+.main-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.main-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary-color);
+  letter-spacing: 0.5px;
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid var(--resume-divider);
+}
+
+.main-section-content {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--resume-text-light);
+  text-align: justify;
+}
+
+/* Employment Timeline */
+.timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.timeline-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.job-company {
+  font-size: 1.05em;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.job-dates {
+  font-size: 0.95em;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.job-title {
+  font-size: 0.95em;
+  font-weight: 700;
+  color: var(--resume-text-dark);
+}
+
+.job-bullets {
+  margin-top: 6px;
+  padding-left: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.job-bullets li {
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--resume-text-light);
+}
+
+/* References styling - Stacked vertically in a single column to match the genuine CV */
+.references-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22px; /* Professional layout spacing between reference contacts */
+}
+.reference-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 11px;
+  line-height: 1.4;
+}
+.ref-name {
+  font-weight: 700;
+  color: var(--resume-text-dark);
+  font-size: 1.05em;
+}
+.ref-title, .ref-company {
+  color: #4a6b82; /* Professional muted blue tone exactly matching genuine reference colors */
+  font-weight: 600;
+}
+.ref-contact {
+  color: var(--resume-text-dark); /* Dark details text */
+}
+
+/* --------------------------------------------------------------------------
+   7. Floating Preview Toolbar
+   -------------------------------------------------------------------------- */
+.preview-toolbar {
+  position: fixed;
+  bottom: 24px;
+  left: calc(45% + (100% - 45%) / 2);
+  transform: translateX(-50%);
+  background-color: rgba(28, 29, 33, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-ui);
+  border-radius: 16px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  z-index: 90;
+  max-width: 90%;
+  transition: bottom 0.3s;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-ui);
+}
+.toolbar-group label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.tool-btn {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-ui);
+  color: var(--text-ui);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.tool-btn:hover {
+  background-color: #2e313a;
+  border-color: #4b5161;
+}
+
+.zoom-value {
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 40px;
+  text-align: center;
+}
+
+.toolbar-select {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-ui);
+  color: var(--text-ui);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-family: var(--font-ui);
+  outline: none;
+  cursor: pointer;
+  width: auto;
+}
+
+.toolbar-separator {
+  width: 1px;
+  height: 20px;
+  background-color: var(--border-ui);
+}
+
+/* Color dot palette */
+.color-options {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.color-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.color-dot:hover {
+  transform: scale(1.2);
+}
+.color-dot.active {
+  border-color: white;
+  transform: scale(1.15);
+}
+
+.custom-color-picker {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  overflow: hidden;
+}
+.custom-color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.custom-color-picker::-webkit-color-swatch {
+  border: 1.5px solid var(--border-ui);
+  border-radius: 50%;
+}
+
+.btn-clear {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.btn-clear:hover {
+  color: #ef4444;
+}
+
+/* --------------------------------------------------------------------------
+   8. Modals & Loaders
+   -------------------------------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.modal-overlay.hidden {
+  display: none !important;
+}
+
+.modal-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-ui);
+  border-radius: 16px;
+  width: 460px;
+  max-width: 90%;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-ui);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 16px;
+}
+.modal-close:hover {
+  color: var(--text-ui);
+}
+
+.modal-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.modal-body p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.share-url-container {
+  display: flex;
+  gap: 8px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-ui);
+  border-radius: 8px;
+  padding: 4px;
+}
+.share-url-container input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding-left: 10px;
+  font-size: 13px;
+  outline: none;
+  color: var(--text-ui);
+}
+.share-url-container input:focus {
+  box-shadow: none;
+}
+.share-url-container button {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 6px;
+}
+
+.modal-note {
+  font-size: 11px !important;
+  color: #818cf8 !important;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Loader Screen */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(18, 19, 22, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+}
+.loading-overlay.hidden {
+  display: none !important;
+}
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-ui);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+.loader-container p {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-ui);
+}
+
+/* Resumes Dashboard Container */
+.resumes-dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 5px;
+  margin-bottom: 10px;
+}
+
+.resume-dashboard-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--bg-dark);
+  border: 1px solid var(--border-ui);
+  border-radius: 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resume-dashboard-item:hover {
+  border-color: #818cf8;
+  background-color: rgba(129, 140, 248, 0.05);
+  transform: translateY(-1px);
+}
+
+.resume-dashboard-item.active {
+  border-color: #6366f1;
+  background-color: rgba(99, 102, 241, 0.1);
+}
+
+.resume-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.resume-item-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-ui);
+  word-break: break-all;
+}
+
+.resume-item-date {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.resume-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-delete-resume {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px 8px;
+  font-size: 13px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-delete-resume:hover {
+  color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+
+/* --------------------------------------------------------------------------
+   9. Animations
+   -------------------------------------------------------------------------- */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* --------------------------------------------------------------------------
+   10. PDF Print Specific Fixes
+   -------------------------------------------------------------------------- */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  body {
+    background-color: white !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    overflow: visible !important;
+    height: auto !important;
+    display: block !important;
+  }
+  .workspace {
+    display: block !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .app-header, .editor-panel, .preview-toolbar, .import-actions, .loading-overlay {
+    display: none !important;
+  }
+  .preview-panel {
+    padding: 0 !important;
+    overflow: visible !important;
+    background-color: white !important;
+  }
+  .a4-wrapper {
+    transform: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+  }
+  .a4-pages-container {
+    gap: 0 !important;
+  }
+  .a4-page {
+    width: 210mm !important;
+    height: 297mm !important;
+    box-shadow: none !important;
+    border: none !important;
+    page-break-after: always !important;
+    display: block !important;
+  }
+  .a4-page.hidden {
+    display: none !important;
+  }
+  .resume-container {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .layout-ats-modern .resume-container {
+    flex-direction: column !important;
+  }
+  .resume-sidebar {
+    flex: 0 0 34% !important;
+    width: 34% !important;
+    max-width: 34% !important;
+    min-width: 34% !important;
+    box-sizing: border-box !important;
+    background-color: var(--sidebar-bg) !important;
+  }
+  .layout-ats-modern .resume-sidebar {
+    display: none !important;
+    width: 0 !important;
+    flex: 0 0 0 !important;
+    max-width: 0 !important;
+    min-width: 0 !important;
+  }
+  .resume-main {
+    flex: 0 0 66% !important;
+    width: 66% !important;
+    max-width: 66% !important;
+    min-width: 66% !important;
+    box-sizing: border-box !important;
+  }
+  .layout-ats-modern .resume-main {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   11. CSS Overrides for HTML2PDF / Export Rendering Sandbox
+   -------------------------------------------------------------------------- */
+body.export-active {
+  display: block !important;
+  height: auto !important;
+  overflow: visible !important;
+  background-color: transparent !important;
+}
+
+.export-mode.a4-pages-container {
+  display: block !important;
+  gap: 0 !important;
+  width: 794px !important;
+  margin: 0 auto !important;
+}
+
+.export-mode .a4-page {
+  width: 794px !important;
+  height: 1123px !important; /* Fixed A4 pixel height to ensure strict, drift-free page cuts */
+  box-shadow: none !important;
+  border: none !important;
+  margin: 0 !important;
+  display: block !important;
+  position: relative !important;
+  page-break-after: always !important;
+}
+
+.export-mode .resume-sidebar {
+  flex: 0 0 34% !important;
+  width: 34% !important;
+  max-width: 34% !important;
+  min-width: 34% !important;
+  box-sizing: border-box !important;
+}
+
+.export-mode.layout-ats-modern .resume-sidebar {
+  display: none !important;
+  width: 0 !important;
+  flex: 0 0 0 !important;
+  max-width: 0 !important;
+  min-width: 0 !important;
+}
+
+.export-mode .resume-main {
+  flex: 0 0 66% !important;
+  width: 66% !important;
+  max-width: 66% !important;
+  min-width: 66% !important;
+  box-sizing: border-box !important;
+}
+
+.export-mode.layout-ats-modern .resume-main {
+  flex: 0 0 100% !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   12. Single-Page Compression Layout Overrides
+   -------------------------------------------------------------------------- */
+.single-page .resume-sidebar {
+  background-color: var(--sidebar-bg);
+}
+.single-page .resume-main {
+  padding: 32px 24px !important;
+  gap: 20px !important;
+}
+.single-page .sidebar-body {
+  padding: 100px 18px 50px 18px !important; /* Fix start a little down from photo and beautiful clearance of bottom crescent */
+  gap: 35px !important; /* Manage the space well to fill the sidebar */
+}
+.single-page .main-section {
+  gap: 10px !important;
+}
+.single-page .main-section-title {
+  font-size: 15.5px; /* Removed !important to allow toolbar dynamic scaling */
+  padding-bottom: 5px !important;
+  letter-spacing: 0.3px !important;
+}
+.single-page .timeline-list {
+  gap: 15px !important;
+}
+.single-page .timeline-item {
+  gap: 3px !important;
+}
+.single-page .job-bullets {
+  margin-top: 4px !important;
+  gap: 3px !important;
+  padding-left: 11px !important;
+}
+.single-page .job-bullets li {
+  font-size: 10.8px; /* Removed !important to allow toolbar dynamic scaling */
+  line-height: 1.4 !important;
+}
+.single-page .main-section-content {
+  font-size: 10.8px; /* Removed !important to allow toolbar dynamic scaling */
+  line-height: 1.4 !important;
+}
+.single-page .candidate-name {
+  font-size: 18px !important; /* Removed !important to allow toolbar dynamic scaling */
+  letter-spacing: 0.5px !important;
+  margin-bottom: 0px !important;
+  white-space: nowrap !important; /* Guarantee name stays on one line in single-page view */
+}
+.single-page .candidate-headline {
+  font-size: 10.8px; /* Removed !important to allow toolbar dynamic scaling */
+  margin-top: 1px !important;
+}
+.single-page .sidebar-header-curve {
+  height: 164px !important;
+  padding-top: 30px !important; /* Bring name down slightly in single-page layout */
+}
+.single-page .curved-bg {
+  height: 45px !important; /* Slightly smaller curve for compressed single-page layout */
+}
+.single-page .circular-photo-container {
+  width: 156px !important;
+  height: 156px !important;
+  top: -82px !important;
+  border-width: 3.5px !important;
+}
+.single-page .sidebar-section {
+  gap: 8px !important;
+}
+.single-page .sidebar-title {
+  font-size: 14px; /* Removed !important to allow toolbar dynamic scaling */
+  padding-bottom: 5px !important;
+}
+.single-page .personal-details-list {
+  gap: 12px !important; /* Manage space to fill */
+}
+.single-page .detail-item {
+  gap: 9px !important;
+  font-size: 10.8px; /* Removed !important to allow toolbar dynamic scaling */
+}
+.single-page .skills-list-bullets {
+  gap: 9px !important; /* Manage space to fill */
+}
+.single-page .skills-list-bullets li {
+  font-size: 10.8px; /* Removed !important to allow toolbar dynamic scaling */
+}
+.single-page .languages-preview-container {
+  gap: 12px !important; /* Manage space to fill */
+}
+.single-page .lang-preview-item {
+  font-size: 10.8px; /* Removed !important to allow toolbar dynamic scaling */
+}
+.single-page .references-list {
+  gap: 13px !important;
+}
+.single-page .reference-item {
+  font-size: 10.8px; /* Removed !important to allow toolbar dynamic scaling */
+  gap: 1px !important;
+}
+.single-page .ref-name {
+  font-size: 11.2px; /* Removed !important to allow toolbar dynamic scaling */
+}
+.single-page .ref-title, .single-page .ref-company {
+  font-size: 9.8px; /* Removed !important to allow toolbar dynamic scaling */
+}
+.single-page .hobbies-list-bullets {
+  gap: 5px !important;
+}
+.single-page .hobbies-list-bullets li {
+  font-size: 10.8px; /* Removed !important to allow toolbar dynamic scaling */
+  e.style.fontSize = bodySize;
+}
+
+/* ==========================================================================
+   13. Layout Template - Classic Centered (layout-header) overrides
+   ========================================================================== */
+.layout-header .resume-container {
+  flex-direction: row-reverse !important;
+}
+
+/* Sidebar styling for Classic template */
+.layout-header .resume-sidebar {
+  width: 34% !important;
+  background-color: transparent !important;
+  border-left: 1px solid var(--resume-divider) !important;
+  z-index: 10 !important;
+}
+
+/* Hide SVG curve accents and decorations */
+.layout-header .sidebar-header-curve,
+.layout-header .sidebar-footer-curve,
+.layout-header .curved-bg {
+  display: none !important;
+}
+
+/* Sidebar padding and spacing adjustments */
+.layout-header .sidebar-body {
+  padding: 40px 18px 24px 20px !important;
+  gap: 25px !important;
+}
+
+/* Move photo container to sit at top of right sidebar */
+.layout-header .sidebar-photo-wrapper {
+  height: auto !important;
+  position: static !important;
+  display: flex !important;
+  justify-content: center !important;
+  margin-bottom: 20px !important;
+}
+
+.layout-header .circular-photo-container {
+  position: static !important;
+  width: 130px !important;
+  height: 130px !important;
+  border: 4px solid var(--primary-color) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Main column style details */
+.layout-header .resume-main {
+  width: 66% !important;
+  padding: 40px 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+}
+
+/* Header style override for name/headline block when inside Main Column */
+.layout-header .resume-main .name-headline-block {
+  padding: 0 0 16px 0 !important;
+  border-bottom: 2px solid var(--primary-color) !important;
+  margin-bottom: 12px !important;
+  width: 100% !important;
+  text-align: left !important;
+}
+
+.layout-header .resume-main .candidate-name {
+  color: var(--primary-color) !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.5px !important;
+  line-height: 1.2 !important;
+  white-space: normal !important;
+}
+
+.layout-header .resume-main .candidate-headline {
+  color: var(--resume-text-light) !important;
+  font-size: 12px !important;
+  margin-top: 6px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+}
+
+/* Single Page compressed values under Classic Layout */
+.single-page.layout-header .resume-main {
+  padding: 30px 20px !important;
+  gap: 15px !important;
+}
+
+.single-page.layout-header .sidebar-body {
+  padding: 30px 14px 20px 14px !important;
+  gap: 20px !important;
+}
+
+.single-page.layout-header .circular-photo-container {
+  width: 105px !important;
+  height: 105px !important;
+  border-width: 3px !important;
+  margin-bottom: 10px !important;
+}
+
+.single-page.layout-header .resume-main .name-headline-block {
+  padding-bottom: 10px !important;
+  margin-bottom: 8px !important;
+}
+
+.single-page.layout-header .resume-main .candidate-name {
+  font-size: 20px !important;
+}
+
+/* ==========================================================================
+   14. Layout Template - Minimalist Executive (layout-minimal) overrides
+   ========================================================================== */
+.layout-minimal .resume-container {
+  flex-direction: column !important;
+  padding: 30px 40px !important;
+  overflow-y: auto !important;
+}
+
+.layout-minimal .resume-sidebar {
+  width: 100% !important;
+  background-color: transparent !important;
+  border-bottom: 1.5px solid var(--resume-divider) !important;
+  margin-bottom: 20px !important;
+  height: auto !important;
+  z-index: 10 !important;
+}
+
+.layout-minimal .sidebar-header-curve,
+.layout-minimal .sidebar-footer-curve,
+.layout-minimal .curved-bg {
+  display: none !important;
+}
+
+.layout-minimal .sidebar-body {
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 16px !important;
+}
+
+.layout-minimal .sidebar-photo-wrapper {
+  height: auto !important;
+  position: static !important;
+  display: flex !important;
+  justify-content: center !important;
+  margin-bottom: 16px !important;
+}
+
+.layout-minimal .circular-photo-container {
+  position: static !important;
+  width: 110px !important;
+  height: 110px !important;
+  border: 3px solid var(--primary-color) !important;
+  box-shadow: none !important;
+}
+
+/* Contact info as horizontal list centered */
+.layout-minimal .personal-details-list {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 8px 24px !important;
+  margin-bottom: 12px !important;
+}
+
+.layout-minimal .detail-item {
+  font-size: 10.5px !important;
+  align-items: center !important;
+}
+
+/* Skills and languages inline horizontal */
+.layout-minimal .sidebar-section {
+  width: 100% !important;
+  text-align: center !important;
+  gap: 8px !important;
+}
+
+.layout-minimal .sidebar-title {
+  font-size: 13px !important;
+  text-align: center !important;
+  border-bottom: none !important;
+  color: var(--primary-color) !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+.layout-minimal .skills-list-bullets {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 6px 12px !important;
+}
+
+.layout-minimal .skills-list-bullets li {
+  font-size: 10.5px !important;
+  background-color: #f1f5f9 !important;
+  padding: 4px 10px !important;
+  border-radius: 12px !important;
+}
+
+.layout-minimal .languages-preview-container {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 15px !important;
+}
+
+.layout-minimal .lang-preview-item {
+  gap: 6px !important;
+}
+
+/* Main content area under Minimal layout */
+.layout-minimal .resume-main {
+  width: 100% !important;
+  padding: 0 !important;
+  gap: 20px !important;
+}
+
+/* Repositioned Name Block Centered */
+.layout-minimal .resume-sidebar .name-headline-block {
+  text-align: center !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin-bottom: 12px !important;
+}
+
+.layout-minimal .candidate-name {
+  color: var(--primary-color) !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  text-align: center !important;
+}
+
+.layout-minimal .candidate-headline {
+  color: var(--text-muted) !important;
+  font-size: 11px !important;
+  text-align: center !important;
+  font-weight: 500 !important;
+}
+
+/* Compress for single page layout-minimal */
+.single-page.layout-minimal .resume-container {
+  padding: 20px 24px !important;
+}
+.single-page.layout-minimal .circular-photo-container {
+  width: 90px !important;
+  height: 90px !important;
+}
+
+/* ==========================================================================
+   15. Layout Template - Creative Banner (layout-creative) overrides
+   ========================================================================== */
+.layout-creative .resume-container {
+  display: grid !important;
+  grid-template-areas:
+    "banner banner"
+    "sidebar main" !important;
+  grid-template-columns: 34% 66% !important;
+  grid-template-rows: auto 1fr !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.layout-creative .resume-sidebar {
+  display: contents !important;
+}
+
+.layout-creative .sidebar-header-curve {
+  grid-area: banner !important;
+  position: static !important;
+  height: auto !important;
+  width: 100% !important;
+  background-color: var(--primary-color) !important;
+  padding: 30px 40px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  box-sizing: border-box !important;
+}
+
+.layout-creative .sidebar-header-curve .name-headline-block {
+  text-align: left !important;
+  width: 70% !important;
+  padding: 0 !important;
+}
+
+.layout-creative .candidate-name {
+  color: white !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  white-space: normal !important;
+}
+
+.layout-creative .candidate-headline {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 11px !important;
+  margin-top: 4px !important;
+}
+
+.layout-creative .sidebar-photo-wrapper {
+  grid-area: banner !important;
+  justify-self: end !important;
+  align-self: center !important;
+  position: relative !important;
+  margin-right: 40px !important;
+  height: auto !important;
+  z-index: 10 !important;
+  display: flex !important;
+}
+
+.layout-creative .circular-photo-container {
+  position: static !important;
+  width: 110px !important;
+  height: 110px !important;
+  border: 3px solid white !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important;
+}
+
+.layout-creative .sidebar-footer-curve,
+.layout-creative .curved-bg {
+  display: none !important;
+}
+
+.layout-creative .sidebar-body {
+  grid-area: sidebar !important;
+  background-color: var(--sidebar-bg) !important;
+  padding: 40px 20px 24px 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 30px !important;
+  height: 100% !important;
+}
+
+.layout-creative .resume-main {
+  grid-area: main !important;
+  padding: 40px 24px !important;
+  background-color: white !important;
+}
+
+/* Single Page adjustments for Creative Banner */
+.single-page.layout-creative .sidebar-header-curve {
+  padding: 20px 30px !important;
+}
+.single-page.layout-creative .circular-photo-container {
+  width: 85px !important;
+  height: 85px !important;
+}
+.single-page.layout-creative .sidebar-body {
+  padding: 24px 14px 20px 14px !important;
+  gap: 20px !important;
+}
+.single-page.layout-creative .resume-main {
+  padding: 24px 20px !important;
+}
+
+/* ==========================================================================
+   16. Layout Template - Glassmorphism Tech (layout-glass) overrides
+   ========================================================================== */
+.layout-glass .resume-container {
+  flex-direction: row-reverse !important;
+  background: radial-gradient(circle at 80% 20%, rgba(248, 250, 252, 0.4) 0%, rgba(255, 255, 255, 1) 80%) !important;
+}
+
+.layout-glass .resume-sidebar {
+  width: 34% !important;
+  background-color: transparent !important;
+  z-index: 10 !important;
+  padding: 30px 14px !important;
+  box-sizing: border-box !important;
+}
+
+.layout-glass .sidebar-header-curve,
+.layout-glass .sidebar-footer-curve,
+.layout-glass .curved-bg {
+  display: none !important;
+}
+
+.layout-glass .sidebar-body {
+  padding: 0 !important;
+  background: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.04) !important;
+  padding: 24px 16px !important;
+  gap: 25px !important;
+  height: auto !important;
+}
+
+.layout-glass .sidebar-photo-wrapper {
+  height: auto !important;
+  position: static !important;
+  display: flex !important;
+  justify-content: center !important;
+  margin-bottom: 15px !important;
+}
+
+.layout-glass .circular-photo-container {
+  position: static !important;
+  width: 110px !important;
+  height: 110px !important;
+  border: 3.5px solid white !important;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.2) !important;
+}
+
+.layout-glass .resume-main {
+  width: 66% !important;
+  padding: 40px 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+}
+
+.layout-glass .resume-main .name-headline-block {
+  padding: 0 0 16px 0 !important;
+  border-bottom: 2px solid var(--primary-color) !important;
+  margin-bottom: 12px !important;
+  width: 100% !important;
+  text-align: left !important;
+}
+
+.layout-glass .resume-main .candidate-name {
+  color: var(--primary-color) !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  white-space: normal !important;
+}
+
+.layout-glass .resume-main .candidate-headline {
+  color: var(--resume-text-light) !important;
+  font-size: 12px !important;
+  margin-top: 6px !important;
+  font-weight: 500 !important;
+}
+
+/* Single page adjustments for Glass layout */
+.single-page.layout-glass .resume-main {
+  padding: 30px 20px !important;
+  gap: 15px !important;
+}
+.single-page.layout-glass .resume-sidebar {
+  padding: 20px 10px !important;
+}
+.single-page.layout-glass .sidebar-body {
+  padding: 16px 12px !important;
+  gap: 16px !important;
+}
+.single-page.layout-glass .circular-photo-container {
+  width: 90px !important;
+  height: 90px !important;
+}
+
+/* ==========================================================================
+   17. Layout Template - Metro Block (layout-metro) overrides
+   ========================================================================== */
+.layout-metro .resume-container {
+  display: flex !important;
+  flex-direction: row !important;
+}
+
+.layout-metro .resume-sidebar {
+  width: 34% !important;
+  background-color: #f8fafc !important;
+  border-right: 1.5px solid var(--resume-divider) !important;
+  height: 100% !important;
+  z-index: 5 !important;
+}
+
+.layout-metro .sidebar-header-curve,
+.layout-metro .sidebar-footer-curve,
+.layout-metro .curved-bg {
+  display: none !important;
+}
+
+.layout-metro .sidebar-body {
+  padding: 40px 16px 24px 16px !important;
+  gap: 25px !important;
+}
+
+.layout-metro .sidebar-photo-wrapper {
+  height: auto !important;
+  position: static !important;
+  display: flex !important;
+  justify-content: center !important;
+  margin-bottom: 20px !important;
+}
+
+/* Metro Block photo is a clean high-contrast square tile */
+.layout-metro .circular-photo-container {
+  position: static !important;
+  border-radius: 0% !important;
+  width: 120px !important;
+  height: 120px !important;
+  border: 4px solid var(--primary-color) !important;
+  box-shadow: none !important;
+}
+
+.layout-metro .resume-main {
+  width: 66% !important;
+  padding: 40px 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+}
+
+/* Metro banner style name block header */
+.layout-metro .resume-main .name-headline-block {
+  padding: 16px 20px !important;
+  background-color: #f1f5f9 !important;
+  border-left: 5px solid var(--primary-color) !important;
+  margin-bottom: 12px !important;
+  width: 100% !important;
+  text-align: left !important;
+  box-sizing: border-box !important;
+}
+
+.layout-metro .resume-main .candidate-name {
+  color: var(--primary-color) !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  white-space: normal !important;
+}
+
+.layout-metro .resume-main .candidate-headline {
+  color: var(--text-muted) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  margin-top: 4px !important;
+}
+
+/* Tile styling for Metro headers */
+.layout-metro .main-section-title {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  padding: 6px 12px !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  border: none !important;
+}
+
+.layout-metro .sidebar-title {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  padding: 5px 10px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  border: none !important;
+}
+
+/* Single page adjustments for Metro layout */
+.single-page.layout-metro .sidebar-body {
+  padding: 24px 12px 20px 12px !important;
+  gap: 20px !important;
+}
+.single-page.layout-metro .circular-photo-container {
+  width: 95px !important;
+  height: 95px !important;
+}
+.single-page.layout-metro .resume-main {
+  padding: 24px 20px !important;
+  gap: 15px !important;
+}
+.single-page.layout-metro .resume-main .name-headline-block {
+  padding: 10px 14px !important;
+  margin-bottom: 8px !important;
+}
+.single-page.layout-metro .resume-main .candidate-name {
+  font-size: 20px !important;
+}
+
+/* ==========================================================================
+   18. Layout Template - Premium Dark Mode (layout-dark) overrides
+   ========================================================================== */
+.layout-dark .a4-page {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+.layout-dark .resume-sidebar {
+  background-color: #1e293b !important;
+}
+
+.layout-dark .sidebar-header-curve {
+  background-color: var(--primary-color) !important;
+}
+
+.layout-dark .curved-bg path,
+.layout-dark .sidebar-footer-curve path {
+  fill: #1e293b !important;
+}
+
+.layout-dark .sidebar-title {
+  color: #38bdf8 !important; /* Premium light blue highlight for title */
+  border-bottom: 1.5px solid #334155 !important;
+}
+
+.layout-dark .main-section-title {
+  color: #38bdf8 !important;
+  border-bottom: 2px solid #334155 !important;
+}
+
+.layout-dark .detail-item,
+.layout-dark .skills-list-bullets li,
+.layout-dark .languages-preview-container,
+.layout-dark .main-section-content,
+.layout-dark .job-bullets li,
+.layout-dark .detail-text {
+  color: #e2e8f0 !important;
+}
+
+.layout-dark .job-company,
+.layout-dark .job-dates {
+  color: #38bdf8 !important;
+}
+
+.layout-dark .job-title {
+  color: #f8fafc !important;
+}
+
+.layout-dark .detail-icon {
+  color: #38bdf8 !important;
+}
+
+.layout-dark .circular-photo-container {
+  border-color: #0f172a !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+.layout-dark .timeline-item {
+  border-left-color: #334155 !important;
+}
+
+/* Single page adjustments for Dark Mode */
+.single-page.layout-dark .sidebar-body {
+  padding: 100px 18px 20px 18px !important;
+  gap: 22px !important;
+}
+.single-page.layout-dark .circular-photo-container {
+  width: 95px !important;
+  height: 95px !important;
+}
+.single-page.layout-dark .resume-main {
+  padding: 24px 20px !important;
+  gap: 15px !important;
+}
+
+/* ==========================================================================
+   19. Layout Template - Neo-Brutalist Bold (layout-bold) overrides
+   ========================================================================== */
+.layout-bold .resume-container {
+  flex-direction: row !important;
+}
+
+.layout-bold .resume-sidebar {
+  width: 34% !important;
+  background-color: #ffffff !important;
+  border-right: 3px solid #000000 !important;
+  z-index: 10 !important;
+}
+
+/* Hide SVG curve decorations */
+.layout-bold .sidebar-header-curve,
+.layout-bold .sidebar-footer-curve,
+.layout-bold .curved-bg {
+  display: none !important;
+}
+
+.layout-bold .sidebar-body {
+  padding: 30px 18px 24px 18px !important;
+  gap: 24px !important;
+}
+
+/* Move photo container to sit at top of right sidebar */
+.layout-bold .sidebar-photo-wrapper {
+  height: auto !important;
+  position: static !important;
+  display: flex !important;
+  justify-content: center !important;
+  margin-top: 10px !important;
+  margin-bottom: 20px !important;
+}
+
+.layout-bold .circular-photo-container {
+  position: static !important;
+  width: 120px !important;
+  height: 120px !important;
+  border-radius: 0% !important; /* Square profile photo */
+  border: 3px solid #000000 !important;
+  box-shadow: 4px 4px 0px #000000 !important;
+  background-color: #f1f5f9 !important;
+}
+
+/* Main Column style details */
+.layout-bold .resume-main {
+  width: 66% !important;
+  padding: 40px 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+  background-color: #ffffff !important;
+}
+
+/* Header style override for name/headline block when inside Main Column */
+.layout-bold .resume-main .name-headline-block {
+  padding: 16px 20px !important;
+  border: 3px solid #000000 !important;
+  background-color: #f8fafc !important;
+  box-shadow: 4px 4px 0px var(--primary-color) !important;
+  margin-bottom: 12px !important;
+  width: 100% !important;
+  text-align: left !important;
+}
+
+.layout-bold .resume-main .candidate-name {
+  color: #000000 !important;
+  font-size: 24px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.5px !important;
+  line-height: 1.2 !important;
+  white-space: normal !important;
+}
+
+.layout-bold .resume-main .candidate-headline {
+  color: #334155 !important;
+  font-size: 11px !important;
+  margin-top: 6px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+}
+
+/* Brutalist headings */
+.layout-bold .main-section-title,
+.layout-bold .sidebar-title {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  padding: 6px 12px !important;
+  font-size: 12.5px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  box-shadow: 3px 3px 0px var(--primary-color) !important;
+}
+
+.layout-bold .detail-item {
+  border: 1px solid #000000 !important;
+  padding: 6px 10px !important;
+  background-color: #f8fafc !important;
+  box-shadow: 2px 2px 0px #000000 !important;
+}
+
+.layout-bold .detail-icon {
+  color: #000000 !important;
+}
+
+.layout-bold .skills-list-bullets li {
+  border: 1.5px solid #000000 !important;
+  padding: 4px 10px !important;
+  background-color: #ffffff !important;
+  box-shadow: 2px 2px 0px var(--primary-color) !important;
+  margin-bottom: 4px !important;
+  font-weight: 700 !important;
+}
+
+/* Single page adjustments for Brutalist layout */
+.single-page.layout-bold .resume-main {
+  padding: 30px 20px !important;
+  gap: 15px !important;
+}
+.single-page.layout-bold .sidebar-body {
+  padding: 24px 12px 20px 12px !important;
+  gap: 20px !important;
+}
+.single-page.layout-bold .circular-photo-container {
+  width: 95px !important;
+  height: 95px !important;
+}
+.single-page.layout-bold .resume-main .name-headline-block {
+  padding: 10px 14px !important;
+  margin-bottom: 8px !important;
+}
+.single-page.layout-bold .resume-main .candidate-name {
+  font-size: 20px !important;
+}
+
+/* ==========================================================================
+   20. Layout Template - Left Accent Stripe (layout-stripe) overrides
+   ========================================================================== */
+.layout-stripe .a4-page::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 14px;
+  background-color: var(--primary-color);
+  z-index: 100;
+}
+
+.layout-stripe .resume-container {
+  flex-direction: column !important;
+  padding: 35px 35px 35px 50px !important; /* Indent content from left stripe */
+}
+
+.layout-stripe .resume-sidebar {
+  width: 100% !important;
+  background-color: transparent !important;
+  height: auto !important;
+  z-index: 10 !important;
+  border-bottom: 2px solid var(--primary-color) !important;
+  padding-bottom: 15px !important;
+  margin-bottom: 20px !important;
+}
+
+/* Hide curves */
+.layout-stripe .sidebar-header-curve,
+.layout-stripe .sidebar-footer-curve,
+.layout-stripe .curved-bg {
+  display: none !important;
+}
+
+.layout-stripe .sidebar-body {
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 16px !important;
+}
+
+.layout-stripe .sidebar-photo-wrapper {
+  height: auto !important;
+  position: static !important;
+  display: flex !important;
+  justify-content: flex-start !important;
+  margin-bottom: 12px !important;
+}
+
+.layout-stripe .circular-photo-container {
+  position: static !important;
+  width: 90px !important;
+  height: 90px !important;
+  border: 3px solid var(--primary-color) !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06) !important;
+}
+
+.layout-stripe .personal-details-list {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-start !important;
+  gap: 8px 20px !important;
+  width: 100% !important;
+}
+
+.layout-stripe .detail-item {
+  font-size: 10px !important;
+}
+
+/* Sidebar sections inline/horizontal */
+.layout-stripe .sidebar-section {
+  width: 100% !important;
+  gap: 8px !important;
+}
+
+.layout-stripe .sidebar-title {
+  font-size: 13px !important;
+  border-bottom: none !important;
+  color: var(--primary-color) !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+.layout-stripe .skills-list-bullets {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 6px 12px !important;
+}
+
+.layout-stripe .skills-list-bullets li {
+  font-size: 10px !important;
+  background-color: var(--sidebar-bg) !important;
+  padding: 4px 10px !important;
+  border-radius: 12px !important;
+}
+
+.layout-stripe .languages-preview-container {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 15px !important;
+}
+
+.layout-stripe .resume-main {
+  width: 100% !important;
+  padding: 0 !important;
+  gap: 20px !important;
+}
+
+.layout-stripe .resume-sidebar .name-headline-block {
+  text-align: left !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin-bottom: 8px !important;
+}
+
+.layout-stripe .candidate-name {
+  color: var(--primary-color) !important;
+  font-size: 26px !important;
+  font-weight: 800 !important;
+}
+
+.layout-stripe .candidate-headline {
+  color: var(--text-muted) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+}
+
+.layout-stripe .main-section-title {
+  color: var(--primary-color) !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  border-bottom: 1.5px solid var(--primary-color) !important;
+  padding-bottom: 3px !important;
+}
+
+/* Single page overrides for Stripe */
+.single-page.layout-stripe .resume-container {
+  padding: 24px 24px 24px 40px !important;
+}
+.single-page.layout-stripe .circular-photo-container {
+  width: 75px !important;
+  height: 75px !important;
+}
+.single-page.layout-stripe .resume-sidebar {
+  margin-bottom: 12px !important;
+  padding-bottom: 8px !important;
+}
+
+/* ==========================================================================
+   21. Layout Template - Infographic Timeline (layout-timeline) overrides
+   ========================================================================== */
+.layout-timeline .resume-sidebar {
+  width: 34% !important;
+  background-color: transparent !important;
+  border-right: 1px solid var(--resume-divider) !important;
+  z-index: 10 !important;
+}
+
+/* Hide SVG curve decorations */
+.layout-timeline .sidebar-header-curve,
+.layout-timeline .sidebar-footer-curve,
+.layout-timeline .curved-bg {
+  display: none !important;
+}
+
+.layout-timeline .sidebar-body {
+  padding: 40px 18px 24px 18px !important;
+  gap: 25px !important;
+}
+
+.layout-timeline .sidebar-photo-wrapper {
+  height: auto !important;
+  position: static !important;
+  display: flex !important;
+  justify-content: center !important;
+  margin-bottom: 20px !important;
+}
+
+.layout-timeline .circular-photo-container {
+  position: static !important;
+  width: 120px !important;
+  height: 120px !important;
+  border: 4px solid var(--primary-color) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.layout-timeline .resume-main {
+  width: 66% !important;
+  padding: 40px 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+}
+
+/* Header style override for name/headline block when inside Main Column */
+.layout-timeline .resume-main .name-headline-block {
+  padding: 0 0 16px 0 !important;
+  border-bottom: 2px solid var(--primary-color) !important;
+  margin-bottom: 12px !important;
+  width: 100% !important;
+  text-align: left !important;
+}
+
+.layout-timeline .resume-main .candidate-name {
+  color: var(--primary-color) !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.5px !important;
+  line-height: 1.2 !important;
+  white-space: normal !important;
+}
+
+.layout-timeline .resume-main .candidate-headline {
+  color: var(--resume-text-light) !important;
+  font-size: 11px !important;
+  margin-top: 4px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+}
+
+/* Timeline specific styles */
+.layout-timeline .timeline-list {
+  position: relative !important;
+  padding-left: 20px !important;
+  border-left: 2px solid var(--primary-color) !important;
+  margin-left: 10px !important;
+  gap: 24px !important;
+}
+
+.layout-timeline .timeline-item {
+  position: relative !important;
+}
+
+.layout-timeline .timeline-item::before {
+  content: '' !important;
+  position: absolute !important;
+  left: -27px !important;
+  top: 4px !important;
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background-color: var(--primary-color) !important;
+  border: 2px solid white !important;
+  z-index: 5 !important;
+  box-shadow: 0 0 0 1px var(--primary-color) !important;
+}
+
+/* Single page overrides for Timeline */
+.single-page.layout-timeline .resume-main {
+  padding: 30px 20px !important;
+  gap: 15px !important;
+}
+.single-page.layout-timeline .sidebar-body {
+  padding: 30px 14px 20px 14px !important;
+  gap: 20px !important;
+}
+.single-page.layout-timeline .circular-photo-container {
+  width: 95px !important;
+  height: 95px !important;
+}
+.single-page.layout-timeline .timeline-list {
+  gap: 16px !important;
+}
+
+/* ==========================================================================
+   22. Layout Template - Modern ATS One-Column (layout-ats-modern) overrides
+   ========================================================================== */
+.layout-ats-modern.resume-pdf-root,
+.layout-ats-modern .resume-container {
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+}
+
+.layout-ats-modern .resume-container {
+  flex-direction: column !important;
+  padding: 0.6in !important; /* Margins: 0.6 inch */
+  height: 100% !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+.layout-ats-modern .resume-sidebar {
+  display: none !important;
+}
+
+.layout-ats-modern .resume-main {
+  width: 100% !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 18px !important; /* Spacing between sections */
+  background-color: #ffffff !important;
+}
+
+/* Header style for ATS layout */
+.layout-ats-modern .resume-main .name-headline-block {
+  text-align: center !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin-bottom: 0px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 1px !important;
+}
+
+.layout-ats-modern .candidate-name {
+  color: var(--primary-color) !important;
+  font-size: 17pt; /* Keep name around 16-18 pt */
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  line-height: 1.1 !important;
+  text-transform: uppercase !important;
+}
+
+.layout-ats-modern .candidate-headline {
+  color: #475569 !important;
+  font-size: 10.5pt; /* Main text: 10.5-11 pt */
+  font-weight: 600 !important;
+  margin-top: 1px !important;
+  line-height: 1.2 !important;
+  display: block !important;
+}
+
+/* Horizontal contact bar */
+.layout-ats-modern .personal-details-list {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 2px 10px !important;
+  width: 100% !important;
+  margin: 2px 0 10px 0 !important;
+  padding: 0 !important;
+}
+
+.layout-ats-modern #preview-item-name {
+  display: none !important; /* Hide redundant name in contact bar */
+}
+
+.layout-ats-modern .detail-item {
+  display: inline-flex; /* Removed !important to allow inline display: none to work */
+  align-items: center !important;
+  font-size: 9.5pt;
+  color: #1e293b !important;
+}
+
+.layout-ats-modern .detail-item i {
+  display: inline-block !important; /* Show icons next to details */
+  margin-right: 5px !important;
+  color: var(--primary-color) !important;
+  font-size: 9.5pt !important;
+  width: auto !important;
+}
+
+.layout-ats-modern .detail-item::after {
+  content: "|";
+  margin-left: 10px;
+  color: #94a3b8 !important;
+}
+
+.layout-ats-modern .detail-item.last-visible::after {
+  display: none !important;
+}
+
+/* Section headings */
+.layout-ats-modern .main-section-title,
+.layout-ats-modern .sidebar-title {
+  color: var(--primary-color) !important;
+  font-size: 12.5pt; /* Section headings: 12-13 pt */
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.8px !important;
+  border-bottom: 1px solid #e2e8f0 !important; /* Elegant light-gray line */
+  border-left: 4px solid var(--primary-color) !important; /* Bold primary color accent block */
+  padding-left: 8px !important;
+  padding-bottom: 3px !important;
+  margin-top: 8px !important;
+  margin-bottom: 6px !important;
+  display: block !important;
+}
+
+/* Section content */
+.layout-ats-modern .main-section-content {
+  font-size: 10.5pt; /* Main text: 10.5-11 pt */
+  line-height: 1.35 !important;
+  color: #1e293b !important;
+}
+
+.layout-ats-modern .timeline-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+.layout-ats-modern .timeline-item {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1px !important;
+}
+
+.layout-ats-modern .timeline-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: baseline !important;
+}
+
+.layout-ats-modern .job-company {
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  font-size: 10.5pt; /* Main text: 10.5-11 pt */
+}
+
+.layout-ats-modern .job-dates {
+  font-weight: 500 !important;
+  color: #475569 !important;
+  font-size: 10pt;
+}
+
+.layout-ats-modern .job-title {
+  font-weight: 600 !important;
+  color: #334155 !important;
+  font-size: 10pt;
+  font-style: italic !important;
+}
+
+.layout-ats-modern .job-bullets {
+  margin-top: 1px !important;
+  padding-left: 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1px !important;
+}
+
+.layout-ats-modern .job-bullets li {
+  font-size: 10pt; /* Body text: 10-10.5 pt */
+  line-height: 1.30 !important;
+  color: #1e293b !important;
+}
+
+/* Soft Skills layout: horizontal pipe-separated list */
+.layout-ats-modern #preview-section-skills .skills-list-bullets {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-start !important;
+  gap: 4px 10px !important;
+  list-style: none !important;
+  padding: 0 !important;
+}
+
+.layout-ats-modern #preview-section-skills .skills-list-bullets li {
+  font-size: 10pt;
+  color: #1e293b !important;
+}
+
+.layout-ats-modern #preview-section-skills .skills-list-bullets li:not(:last-child)::after {
+  content: "|";
+  margin-left: 10px;
+  color: #cbd5e1 !important;
+}
+
+/* Technical Skills layout: detailed list */
+.layout-ats-modern #preview-section-tech-skills .skills-list-bullets {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  list-style: none !important;
+  padding: 0 !important;
+}
+
+.layout-ats-modern #preview-section-tech-skills .skills-list-bullets li {
+  font-size: 10pt;
+  line-height: 1.30 !important;
+  color: #1e293b !important;
+}
+
+/* Languages layout */
+.layout-ats-modern .languages-preview-container {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 4px 12px !important;
+}
+
+.layout-ats-modern .lang-preview-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 10pt;
+  color: #1e293b !important;
+}
+
+.layout-ats-modern .lang-preview-item .rating-dots {
+  display: none !important;
+}
+
+/* Single page compression overrides for ATS to guarantee strictly 1 page */
+.single-page.layout-ats-modern .resume-container {
+  padding: 0.5in !important; /* Margins: 0.5 inch */
+}
+
+.single-page.layout-ats-modern .resume-main {
+  gap: 12px !important;
+}
+
+.single-page.layout-ats-modern .main-section-title,
+.single-page.layout-ats-modern .sidebar-title {
+  margin-top: 5px !important;
+  margin-bottom: 4px !important;
+}
+
+.single-page.layout-ats-modern .timeline-list {
+  gap: 2px !important;
+}
+
+
+

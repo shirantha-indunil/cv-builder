@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Interactive Resume Builder</title>
+  
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons for a highly premium, modern interface -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css?v=45">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-left">
+      <a href="#" class="back-btn" id="btn-back-dashboard" title="View Saved Resumes">
+        <i class="fa-solid fa-folder-open"></i>
+        <span>My Resumes</span>
+      </a>
+      <div class="title-container">
+        <input type="text" id="resume-title" value="Untitled resume" class="editable-title" placeholder="Resume Title">
+        <span class="save-status" id="save-status">
+          <i class="fa-solid fa-cloud"></i>
+          <span>Synced locally</span>
+        </span>
+      </div>
+    </div>
+    
+    <div class="header-right">
+      <div class="history-controls">
+        <button id="btn-undo" title="Undo" class="ctrl-btn" disabled><i class="fa-solid fa-rotate-left"></i></button>
+        <button id="btn-redo" title="Redo" class="ctrl-btn" disabled><i class="fa-solid fa-rotate-right"></i></button>
+      </div>
+      <div class="language-selector">
+        <i class="fa-solid fa-globe"></i>
+        <select id="lang-select">
+          <option value="en">EN</option>
+          <option value="es">ES</option>
+          <option value="fr">FR</option>
+        </select>
+      </div>
+      <button id="btn-save-cloud" class="cloud-save-btn btn-secondary">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <span>Save to Cloud</span>
+      </button>
+      <button id="btn-download" class="download-btn btn-primary">
+        <i class="fa-solid fa-download"></i>
+        <span>Download PDF</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Workspace Container -->
+  <main class="workspace">
+    
+    <!-- Left Editor Panel -->
+    <section class="editor-panel">
+      
+      <!-- Quick Options -->
+      <div class="layout-toggle-container">
+        <label class="toggle-switch">
+          <input type="checkbox" id="chk-multi-page">
+          <span class="slider round"></span>
+          <span class="toggle-label" style="font-weight: 600; color: #fff; font-size: 12px;">Enable Multi-page Layout (2 Pages)</span>
+        </label>
+      </div>
+
+      <!-- Quick Import Actions -->
+      <div class="import-actions">
+        <div class="import-card" id="btn-upload-resume">
+          <i class="fa-solid fa-file-arrow-up"></i>
+          <div>
+            <h4>Upload existing resume</h4>
+            <p>PDF or JSON config</p>
+          </div>
+        </div>
+        <div class="import-card" id="btn-import-linkedin">
+          <i class="fa-brands fa-linkedin"></i>
+          <div>
+            <h4>Import LinkedIn profile</h4>
+            <p>Paste profile link</p>
+          </div>
+        </div>
+        <div class="import-card" id="btn-load-example">
+          <i class="fa-solid fa-square-plus"></i>
+          <div>
+            <h4>Start from example</h4>
+            <p>Prefill matching mock data</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion Form Sections -->
+      <div class="form-sections">
+        
+        <!-- 1. Personal Details -->
+        <div class="accordion-item active" id="section-personal">
+          <div class="accordion-header">
+            <h3><i class="fa-solid fa-user-circle"></i> Personal details</h3>
+            <i class="fa-solid fa-chevron-up toggle-icon"></i>
+          </div>
+          <div class="accordion-content">
+            <div class="personal-grid">
+              
+              <!-- Profile Picture Upload Area -->
+              <div class="photo-upload-container">
+                <label class="photo-label">Photo</label>
+                <div class="photo-dropzone" id="photo-dropzone">
+                  <input type="file" id="photo-input" accept="image/*" style="display: none;">
+                  <div class="dropzone-placeholder" id="dropzone-placeholder">
+                    <i class="fa-solid fa-camera"></i>
+                    <span>Upload photo</span>
+                  </div>
+                  <img id="photo-preview-image" src="" alt="Profile Preview" class="photo-preview-img hidden">
+                  <button type="button" class="remove-photo-btn hidden" id="btn-remove-photo">
+                    <i class="fa-solid fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Personal Details Inputs -->
+              <div class="personal-inputs">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="first-name">Given name</label>
+                    <input type="text" id="first-name" placeholder="e.g. Shirantha">
+                  </div>
+                  <div class="form-group">
+                    <label for="last-name">Family name</label>
+                    <input type="text" id="last-name" placeholder="e.g. Indunil">
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="job-position">Desired job position</label>
+                  <div class="job-headline-row">
+                    <input type="text" id="job-position" placeholder="e.g. Human Resource Executive">
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="chk-use-headline" checked>
+                      <span class="slider round"></span>
+                      <span class="toggle-label">Use as headline</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email-address"><i class="fa-solid fa-envelope"></i> Email address</label>
+                <input type="email" id="email-address" placeholder="e.g. shiranthaindunil101@gmail.com">
+              </div>
+              <div class="form-group">
+                <label for="phone-number"><i class="fa-solid fa-phone"></i> Phone number</label>
+                <input type="tel" id="phone-number" placeholder="e.g. +94769810908">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="address-street"><i class="fa-solid fa-house"></i> Address</label>
+              <input type="text" id="address-street" placeholder="e.g. 75/10, Wanatha Road, Gangodawila, Nugegoda">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="dob"><i class="fa-solid fa-calendar-days"></i> Date of birth</label>
+                <input type="text" id="dob" placeholder="e.g. November 1, 1998">
+              </div>
+              <div class="form-group">
+                <label for="linkedin-url"><i class="fa-brands fa-linkedin-in"></i> LinkedIn URL</label>
+                <input type="text" id="linkedin-url" placeholder="e.g. linkedin.com/in/shirantha-indunil">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="github-url"><i class="fa-brands fa-github"></i> GitHub URL</label>
+                <input type="text" id="github-url" placeholder="e.g. github.com/kaveeshasewmini">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Profile Summary -->
+        <div class="accordion-item" id="section-profile">
+          <div class="accordion-header">
+            <h3><i class="fa-solid fa-id-card"></i> Profile Summary</h3>
+            <i class="fa-solid fa-chevron-down toggle-icon"></i>
+          </div>
+          <div class="accordion-content">
+            <p class="section-help">Write a short, engaging description of your career goals and key achievements.</p>
+            <div class="form-group">
+              <label for="profile-text">Profile Description</label>
+              <textarea id="profile-text" rows="6" placeholder="Innovative HR Professional with a proven track record..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Projects & Experience -->
+        <div class="accordion-item" id="section-employment">
+          <div class="accordion-header">
+            <h3><i class="fa-solid fa-briefcase"></i> Projects & Experience</h3>
+            <i class="fa-solid fa-chevron-down toggle-icon"></i>
+          </div>
+          <div class="accordion-content">
+            <p class="section-help">Add your academic projects, software engineering projects, IoT systems projects, or relevant experience.</p>
+            <div id="employment-list" class="dynamic-list">
+              <!-- Dynamically populated employment items will go here -->
+            </div>
+            <button type="button" class="btn-add-item" id="btn-add-employment">
+              <i class="fa-solid fa-plus"></i> Add project / experience
+            </button>
+          </div>
+        </div>
+
+        <!-- 4. Education History -->
+        <div class="accordion-item" id="section-education">
+          <div class="accordion-header">
+            <h3><i class="fa-solid fa-graduation-cap"></i> Education</h3>
+            <i class="fa-solid fa-chevron-down toggle-icon"></i>
+          </div>
+          <div class="accordion-content">
+            <p class="section-help">Add your academic background, degrees, and certificates.</p>
+            <div id="education-list" class="dynamic-list">
+              <!-- Dynamically populated education items will go here -->
+            </div>
+            <button type="button" class="btn-add-item" id="btn-add-education">
+              <i class="fa-solid fa-plus"></i> Add education
+            </button>
+          </div>
+        </div>
+
+        <!-- 4.5 Achievements -->
+        <div class="accordion-item" id="section-achievements">
+          <div class="accordion-header">
+            <h3><i class="fa-solid fa-trophy"></i> Achievements</h3>
+            <i class="fa-solid fa-chevron-down toggle-icon"></i>
+          </div>
+          <div class="accordion-content">
+            <p class="section-help">Add awards, academic recognition, honors, or key milestones.</p>
+            <div id="achievements-list" class="dynamic-list">
+              <!-- Dynamically populated achievements bullet rows -->
+            </div>
+            <button type="button" class="btn-add-item" id="btn-add-achievement">
+              <i class="fa-solid fa-plus"></i> Add achievement
+            </button>
+          </div>
+        </div>
+
+        <!-- 5. Soft Skills -->
+        <div class="accordion-item" id="section-skills">
+          <div class="accordion-header">
+            <h3><i class="fa-solid fa-bolt"></i> Soft Skills</h3>
+            <i class="fa-solid fa-chevron-down toggle-icon"></i>
+          </div>
+          <div class="accordion-content">
+            <p class="section-help">Add key soft skills or traits that set you apart.</p>
+            <div id="skills-list" class="tags-container">
+              <!-- Soft skills tags will load here -->
+            </div>
+            <div class="form-row inline-adder">
+              <input type="text" id="skill-input" placeholder="e.g. Leadership">
+              <button type="button" class="btn-small-add" id="btn-add-skill">Add</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Technical Skills -->
+        <div class="accordion-item" id="section-tech-skills">
+          <div class="accordion-header">
+            <h3><i class="fa-solid fa-gears"></i> Technical Skills</h3>
+            <i class="fa-solid fa-chevron-down toggle-icon"></i>
+          </div>
+          <div class="accordion-content">
+            <p class="section-help">Add technical systems, tools, or domain-specific skills (e.g. Peoples HR - hSenid).</p>
+            <div id="tech-skills-list" class="tags-container">
+              <!-- Technical skills tags will load here -->
+            </div>
+            <div class="form-row inline-adder">
+              <input type="text" id="tech-skill-input" placeholder="e.g. Peoples HR - hSenid">
+              <button type="button" class="btn-small-add" id="btn-add-tech-skill">Add</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. Languages -->
+        <div class="accordion-item" id="section-languages">
+          <div class="accordion-header">
+            <h3><i class="fa-solid fa-language"></i> Languages</h3>
+            <i class="fa-solid fa-chevron-down toggle-icon"></i>
+          </div>
+          <div class="accordion-content">
+            <p class="section-help">Mention your languages and proficiency ratings.</p>
+            <div id="languages-list" class="dynamic-list">
+              <!-- Dynamically populated language items will go here -->
+            </div>
+            <button type="button" class="btn-add-item" id="btn-add-language">
+              <i class="fa-solid fa-plus"></i> Add language
+            </button>
+          </div>
+        </div>
+
+        <!-- 8. Hobbies -->
+        <div class="accordion-item" id="section-hobbies">
+          <div class="accordion-header">
+            <h3><i class="fa-solid fa-heart"></i> Hobbies</h3>
+            <i class="fa-solid fa-chevron-down toggle-icon"></i>
+          </div>
+          <div class="accordion-content">
+            <p class="section-help">Add personal interests and hobbies (renders on Page 2 sidebar).</p>
+            <div id="hobbies-list" class="tags-container">
+              <!-- Hobbies tags will load here -->
+            </div>
+            <div class="form-row inline-adder">
+              <input type="text" id="hobby-input" placeholder="e.g. Traveling">
+              <button type="button" class="btn-small-add" id="btn-add-hobby">Add</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. References -->
+        <div class="accordion-item" id="section-references">
+          <div class="accordion-header">
+            <h3><i class="fa-solid fa-address-book"></i> References</h3>
+            <i class="fa-solid fa-chevron-down toggle-icon"></i>
+          </div>
+          <div class="accordion-content">
+            <p class="section-help">Add professional or academic references (renders on Page 2).</p>
+            <div id="references-list" class="dynamic-list">
+              <!-- References dynamically populated will load here -->
+            </div>
+            <button type="button" class="btn-add-item" id="btn-add-reference">
+              <i class="fa-solid fa-plus"></i> Add reference
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Right Live Preview Panel -->
+    <section class="preview-panel">
+      
+      <!-- A4 Sheet Canvas Wrapper -->
+      <div class="a4-wrapper" id="a4-wrapper">
+        <div class="a4-pages-container" id="resume-pdf-root">
+          
+          <!-- ================= PAGE 1 ================= -->
+          <div class="a4-page page-1-root" id="page-1">
+            <div class="resume-container">
+              
+              <!-- Left Sidebar Section -->
+              <div class="resume-sidebar">
+                
+                <!-- Curved Top Header Section -->
+                <div class="sidebar-header-curve">
+                  <div class="curved-bg">
+                    <svg viewBox="0 0 100 30" preserveAspectRatio="none" style="width: 100%; height: 100%; display: block;">
+                      <path d="M 0 0 Q 50 25 100 0 L 100 30 L 0 30 Z" fill="var(--sidebar-bg)"></path>
+                    </svg>
+                  </div>
+                  <div class="name-headline-block">
+                    <h1 id="preview-name" class="candidate-name">KAVEESHA SEWMINI</h1>
+                    <p id="preview-headline" class="candidate-headline">IT Undergraduate | Software Engineering Intern | Java | SQL | Web Development</p>
+                  </div>
+                </div>
+                
+                <!-- Circle Profile Image Overlay -->
+                <div class="sidebar-photo-wrapper">
+                  <div class="circular-photo-container">
+                    <img id="preview-photo" src="" alt="Candidate Photo" class="hidden">
+                    <div id="preview-photo-placeholder" class="photo-placeholder-icon">
+                      <i class="fa-solid fa-user"></i>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Sidebar Inner Content (Gray area) -->
+                <div class="sidebar-body">
+                  
+                  <!-- Personal Details Section -->
+                  <div class="sidebar-section">
+                    <h2 class="sidebar-title">Personal details</h2>
+                    <div class="personal-details-list">
+                      <div class="detail-item" id="preview-item-name">
+                        <i class="fa-solid fa-user detail-icon"></i>
+                        <span id="txt-preview-fullname" class="detail-text">Kaveesha Sewmini</span>
+                      </div>
+                      <div class="detail-item" id="preview-item-email">
+                        <i class="fa-solid fa-envelope detail-icon"></i>
+                        <span id="txt-preview-email" class="detail-text">balasooriyakavee2003@gmail.com</span>
+                      </div>
+                      <div class="detail-item" id="preview-item-phone">
+                        <i class="fa-solid fa-phone detail-icon"></i>
+                        <span id="txt-preview-phone" class="detail-text">+94 76 745 8455</span>
+                      </div>
+                      <div class="detail-item" id="preview-item-address">
+                        <i class="fa-solid fa-house detail-icon"></i>
+                        <span id="txt-preview-address" class="detail-text">Malabe, Colombo</span>
+                      </div>
+                      <div class="detail-item" id="preview-item-dob" style="display: none;">
+                        <i class="fa-solid fa-calendar detail-icon"></i>
+                        <span id="txt-preview-dob" class="detail-text"></span>
+                      </div>
+                      <div class="detail-item" id="preview-item-linkedin">
+                        <i class="fa-brands fa-linkedin detail-icon"></i>
+                        <span id="txt-preview-linkedin" class="detail-text">linkedin.com/in/kaveeshasewmini-balasooriya-8a856b225</span>
+                      </div>
+                      <div class="detail-item" id="preview-item-github">
+                        <i class="fa-brands fa-github detail-icon"></i>
+                        <span id="txt-preview-github" class="detail-text">github.com/kaveeshasewmini</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Soft Skills Section -->
+                  <div class="sidebar-section" id="preview-section-skills">
+                    <h2 class="sidebar-title">Soft Skills</h2>
+                    <ul class="skills-list-bullets" id="preview-skills-container">
+                      <li>Problem Solving</li>
+                      <li>Team Collaboration</li>
+                      <li>Communication</li>
+                      <li>Time Management</li>
+                      <li>Self-Learning</li>
+                      <li>Attention to Detail</li>
+                    </ul>
+                  </div>
+                  
+                  <!-- Languages Section -->
+                  <div class="sidebar-section" id="preview-section-languages">
+                    <h2 class="sidebar-title">Languages</h2>
+                    <div class="languages-preview-container" id="preview-languages-container">
+                      <!-- Populated dynamically -->
+                    </div>
+                  </div>
+
+                </div>
+                
+                <!-- Curved Footer Decoration -->
+                <div class="sidebar-footer-curve">
+                  <svg viewBox="0 0 100 60" preserveAspectRatio="none" style="width: 100%; height: 100%; display: block;">
+                    <path d="M 0 0 Q 50 45 100 0 L 100 60 L 0 60 Z"></path>
+                  </svg>
+                </div>
+              </div>
+              
+              <!-- Right Main Resume Column -->
+              <div class="resume-main">
+                
+                <!-- Profile section -->
+                <div class="main-section" id="preview-section-profile">
+                  <h2 class="main-section-title">Profile</h2>
+                  <div class="main-section-content" id="preview-profile-text">
+                    IT undergraduate at SLIIT with hands-on academic project experience in Java, MySQL, JDBC, MVC architecture, web development, and Arduino-based IoT systems. Strong foundation in object-oriented programming, database design, and system development. Seeking a Software Engineering / IT Internship to apply technical knowledge in real-world projects and grow within a professional development team.
+                  </div>
+                </div>
+                
+                <!-- Employment section (Page 1 split) -->
+                <div class="main-section" id="preview-section-employment-p1">
+                  <h2 class="main-section-title">Projects & Experience</h2>
+                  <div class="main-section-content timeline-list" id="preview-employment-container-p1">
+                    <!-- Dynamically mapped Page 1 jobs -->
+                  </div>
+                </div>
+
+                <!-- Education section (renders on Page 1 if Page 2 is disabled) -->
+                <div class="main-section" id="preview-section-education-p1">
+                  <h2 class="main-section-title">Education</h2>
+                  <div class="main-section-content timeline-list" id="preview-education-container-p1">
+                    <!-- Education items fallback -->
+                  </div>
+                </div>
+
+                <!-- Achievements section (Page 1) -->
+                <div class="main-section" id="preview-section-achievements-p1">
+                  <h2 class="main-section-title">Achievements</h2>
+                  <div class="main-section-content">
+                    <ul class="job-bullets" id="preview-achievements-container-p1" style="list-style: disc; padding-left: 14px;">
+                      <!-- Populated dynamically -->
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+          
+          <!-- ================= PAGE 2 ================= -->
+          <div class="a4-page page-2-root hidden" id="page-2">
+            <div class="resume-container">
+              
+              <!-- Page 2 Sidebar (No header curves, matches sidebar-bg) -->
+              <div class="resume-sidebar">
+                <div class="sidebar-body" style="padding-top: 40px;">
+                  
+                  <!-- Hobbies Section (Page 2 specific) -->
+                  <div class="sidebar-section" id="preview-section-hobbies">
+                    <h2 class="sidebar-title">Hobbies</h2>
+                    <ul class="hobbies-list-bullets" id="preview-hobbies-container">
+                      <!-- Square bullets loaded here -->
+                    </ul>
+                  </div>
+                  
+                  <!-- Technical Skills Section (Page 2 specific) -->
+                  <div class="sidebar-section" id="preview-section-tech-skills">
+                    <h2 class="sidebar-title">Technical Skills</h2>
+                    <ul class="skills-list-bullets" id="preview-tech-skills-container">
+                      <!-- Bullet list loaded here -->
+                    </ul>
+                  </div>
+
+                </div>
+                
+                <!-- Curved Footer Decoration -->
+                <div class="sidebar-footer-curve">
+                  <svg viewBox="0 0 100 60" preserveAspectRatio="none" style="width: 100%; height: 100%; display: block;">
+                    <path d="M 0 0 Q 50 45 100 0 L 100 60 L 0 60 Z"></path>
+                  </svg>
+                </div>
+              </div>
+              
+              <!-- Page 2 Main Column -->
+              <div class="resume-main">
+                
+                <!-- Employment section (Page 2 continued) -->
+                <div class="main-section" id="preview-section-employment-p2">
+                  <h2 class="main-section-title">Projects & Experience (Continued)</h2>
+                  <div class="main-section-content timeline-list" id="preview-employment-container-p2">
+                    <!-- Dynamically mapped Page 2 jobs -->
+                  </div>
+                </div>
+                
+                <!-- Education section (Dynamic page placement) -->
+                <div class="main-section" id="preview-section-education-p2">
+                  <h2 class="main-section-title">Education</h2>
+                  <div class="main-section-content timeline-list" id="preview-education-container-p2">
+                    <!-- Education items -->
+                  </div>
+                </div>
+
+                <!-- Achievements section (Page 2) -->
+                <div class="main-section" id="preview-section-achievements-p2">
+                  <h2 class="main-section-title">Achievements</h2>
+                  <div class="main-section-content">
+                    <ul class="job-bullets" id="preview-achievements-container-p2" style="list-style: disc; padding-left: 14px;">
+                      <!-- Populated dynamically -->
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- References section -->
+                <div class="main-section" id="preview-section-references">
+                  <h2 class="main-section-title">References</h2>
+                  <div class="main-section-content references-list" id="preview-references-container">
+                    <!-- Dynamically mapped references -->
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Preview Floating Toolbar -->
+      <div class="preview-toolbar">
+        <div class="toolbar-group font-controls">
+          <button id="btn-zoom-out" class="tool-btn" title="Zoom Out"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+          <span class="zoom-value" id="zoom-value">100%</span>
+          <button id="btn-zoom-in" class="tool-btn" title="Zoom In"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+        </div>
+        
+        <div class="toolbar-separator"></div>
+        
+        <div class="toolbar-group">
+          <label title="Font Family"><i class="fa-solid fa-font"></i></label>
+          <select id="font-family-select" class="toolbar-select">
+            <option value="Arial MT" selected>Arial MT</option>
+            <option value="Calibri">Calibri</option>
+            <option value="Aptos">Aptos</option>
+            <option value="Segoe UI">Segoe UI</option>
+            <option value="Helvetica">Helvetica</option>
+            <option value="Outfit">Outfit</option>
+            <option value="Inter">Inter</option>
+            <option value="Roboto">Roboto</option>
+          </select>
+        </div>
+        
+        <div class="toolbar-separator"></div>
+
+        <div class="toolbar-group">
+          <label title="Layout Template"><i class="fa-solid fa-table-columns"></i> Layout</label>
+          <select id="layout-style-select" class="toolbar-select">
+            <option value="layout-sidebar" selected>Modern Sidebar</option>
+            <option value="layout-ats-modern">Modern ATS One-Column</option>
+            <option value="layout-header">Classic Centered</option>
+            <option value="layout-minimal">Minimalist Executive</option>
+            <option value="layout-creative">Creative Banner</option>
+            <option value="layout-glass">Glassmorphism Tech</option>
+            <option value="layout-metro">Metro Block</option>
+            <option value="layout-dark">Premium Dark Mode</option>
+            <option value="layout-bold">Neo-Brutalist Bold</option>
+            <option value="layout-stripe">Left Accent Stripe</option>
+            <option value="layout-timeline">Infographic Timeline</option>
+          </select>
+        </div>
+        
+        <div class="toolbar-separator"></div>
+
+        <div class="toolbar-group">
+          <label title="Text Size"><i class="fa-solid fa-text-height"></i></label>
+          <button id="btn-text-decrease" class="tool-btn" title="Decrease Font Size"><i class="fa-solid fa-minus"></i></button>
+          <span id="font-size-indicator" style="font-size:12px; font-weight:600;">14px</span>
+          <button id="btn-text-increase" class="tool-btn" title="Increase Font Size"><i class="fa-solid fa-plus"></i></button>
+        </div>
+
+        <div class="toolbar-separator"></div>
+
+        <div class="toolbar-group color-palette-container">
+          <label title="Theme Color"><i class="fa-solid fa-palette"></i></label>
+          <div class="color-options">
+            <span class="color-dot active" data-color="#2d527c" style="background-color: #2d527c;" title="Classic Navy"></span>
+            <span class="color-dot" data-color="#1e3d59" style="background-color: #1e3d59;" title="Deep Ocean"></span>
+            <span class="color-dot" data-color="#226f54" style="background-color: #226f54;" title="Forest Green"></span>
+            <span class="color-dot" data-color="#563f46" style="background-color: #563f46;" title="Sophisticated Plum"></span>
+            <span class="color-dot" data-color="#1b1c1e" style="background-color: #1b1c1e;" title="Jet Black"></span>
+            <input type="color" id="theme-color-picker" class="custom-color-picker" title="Custom color">
+          </div>
+        </div>
+
+        <div class="toolbar-separator"></div>
+
+        <button id="btn-reset" class="btn-clear" title="Reset All Fields">
+          <i class="fa-solid fa-trash-can"></i>
+          <span>Clear</span>
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Share Link Dialog (Modal) -->
+  <div id="share-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Resume Cloud Saved!</h3>
+        <button class="modal-close" id="btn-close-modal"><i class="fa-solid fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <p>Your resume data is now securely stored in Firebase. You can return to edit or share it using the unique link below:</p>
+        <div class="share-url-container">
+          <input type="text" id="share-url" readonly>
+          <button id="btn-copy-url" class="btn-primary"><i class="fa-solid fa-copy"></i> Copy</button>
+        </div>
+        <p class="modal-note"><i class="fa-solid fa-info-circle"></i> Tip: Anyone with this link can view this resume layout.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Resumes Manager Dialog (Modal) -->
+  <div id="resumes-modal" class="modal-overlay hidden">
+    <div class="modal-card" style="width: 580px; max-width: 95%;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-folder-open" style="color: #818cf8; margin-right: 8px;"></i> Saved Resumes</h3>
+        <button class="modal-close" id="btn-close-resumes-modal"><i class="fa-solid fa-times"></i></button>
+      </div>
+      <div class="modal-body" style="gap: 20px;">
+        <p style="margin-bottom: 5px;">Manage your resume drafts. Click on any resume to open it, or create a brand new one.</p>
+        
+        <div id="resumes-list-container" class="resumes-dashboard-container">
+          <!-- Loaded dynamically -->
+        </div>
+
+        <button id="btn-create-new-resume" class="btn-primary" style="width: 100%; justify-content: center; height: 44px; font-size: 14px;">
+          <i class="fa-solid fa-circle-plus"></i> Create New Resume
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="loader-container">
+      <div class="spinner"></div>
+      <p id="loading-text">Generating PDF...</p>
+    </div>
+  </div>
+
+  <!-- Firebase Compat Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+  
+  <!-- Firebase Initialization Configuration -->
+  <script src="firebase-config.js"></script>
+
+  <!-- html2pdf.js for client-side pixel perfect A4 rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- Application Logic -->
+  <script src="app.js?v=45"></script>
+
+</body>
+</html>
