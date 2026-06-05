@@ -2322,18 +2322,56 @@ function autoSave() {
 }
 
 // --- Resumes List Dashboard Rendering & Operations ---
-function renderResumesDashboardList() {
+async function renderResumesDashboardList() {
   const container = els.resumesListContainer;
-  container.innerHTML = "";
+  container.innerHTML = `
+    <div style="text-align: center; padding: 30px; color: var(--text-muted); font-size: 13px;">
+      <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 24px; margin-bottom: 8px; display: block; color: var(--text-muted);"></i>
+      Loading resumes...
+    </div>
+  `;
   
-  const index = getLocalResumesIndex();
+  let localIndex = getLocalResumesIndex();
+  let cloudIndex = [];
+  
+  if (typeof fetchAllResumesFromCloud === "function") {
+    try {
+      cloudIndex = await fetchAllResumesFromCloud();
+    } catch (e) {
+      console.error("Error fetching resumes from cloud:", e);
+    }
+  }
+  
+  // Merge indexes, prioritizing cloud entries (avoiding duplicate IDs)
+  const mergedMap = new Map();
+  
+  // Add local entries first
+  localIndex.forEach(item => {
+    mergedMap.set(item.id, {
+      ...item,
+      isCloud: false
+    });
+  });
+  
+  // Add cloud entries next (overwrite/update if match)
+  cloudIndex.forEach(item => {
+    mergedMap.set(item.id, {
+      ...item,
+      isCloud: true
+    });
+  });
+  
+  const mergedIndex = Array.from(mergedMap.values());
+  
   // Sort by updatedAt descending
-  index.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  mergedIndex.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  
+  container.innerHTML = "";
   
   const urlParams = new URLSearchParams(window.location.search);
   const activeId = urlParams.get("id");
   
-  if (index.length === 0) {
+  if (mergedIndex.length === 0) {
     container.innerHTML = `
       <div style="text-align: center; padding: 30px; color: var(--text-muted); font-size: 13px;">
         <i class="fa-regular fa-folder" style="font-size: 24px; margin-bottom: 8px; display: block; color: var(--text-muted);"></i>
@@ -2343,7 +2381,7 @@ function renderResumesDashboardList() {
     return;
   }
   
-  index.forEach(item => {
+  mergedIndex.forEach(item => {
     const isActive = item.id === activeId;
     const itemCard = document.createElement("div");
     itemCard.className = `resume-dashboard-item ${isActive ? 'active' : ''}`;
@@ -2355,14 +2393,12 @@ function renderResumesDashboardList() {
       minute: '2-digit'
     });
     
-    const isCloud = !item.id.startsWith("local_");
-    
     itemCard.innerHTML = `
       <div class="resume-item-info">
         <span class="resume-item-title">${escapeHtml(item.title || "Untitled resume")}</span>
         <span class="resume-item-date">
           <i class="fa-regular fa-clock"></i> Updated: ${formattedDate}
-          ${isCloud ? '<span style="color:#818cf8; margin-left:8px;"><i class="fa-solid fa-cloud"></i> Cloud synced</span>' : '<span style="color:#10b981; margin-left:8px;"><i class="fa-solid fa-circle-check"></i> Local only</span>'}
+          ${item.isCloud ? '<span style="color:#818cf8; margin-left:8px;"><i class="fa-solid fa-cloud"></i> Cloud synced</span>' : '<span style="color:#10b981; margin-left:8px;"><i class="fa-solid fa-circle-check"></i> Local only</span>'}
         </span>
       </div>
       <div class="resume-item-actions">
@@ -2456,9 +2492,26 @@ function createNewResumeDraft() {
   pushHistory();
 }
 
-function deleteResumeDraft(id, title) {
-  if (confirm(`Are you sure you want to delete "${title || 'Untitled resume'}"? This will delete all local data for this draft.`)) {
-    // Remove from storage
+async function deleteResumeDraft(id, title) {
+  const isCloud = !id.startsWith("local_");
+  const confirmMsg = isCloud 
+    ? `Are you sure you want to delete "${title || 'Untitled resume'}"? This will permanently delete the draft from BOTH cloud database and local cache.`
+    : `Are you sure you want to delete "${title || 'Untitled resume'}"? This will delete all local data for this draft.`;
+    
+  if (confirm(confirmMsg)) {
+    // If it's a cloud resume, delete from Firestore first
+    if (isCloud && typeof deleteResumeFromCloud === "function") {
+      els.loadingOverlay.classList.remove("hidden");
+      els.loadingText.innerText = "Deleting from cloud...";
+      try {
+        await deleteResumeFromCloud(id);
+      } catch (error) {
+        console.error("Failed to delete from Firestore:", error);
+      }
+      els.loadingOverlay.classList.add("hidden");
+    }
+
+    // Remove from local storage
     localStorage.removeItem(`resume_${id}`);
     
     // Remove from index
@@ -2471,10 +2524,27 @@ function deleteResumeDraft(id, title) {
     const activeId = urlParams.get("id");
     
     if (activeId === id) {
-      if (index.length > 0) {
+      // Find what's left in local index or cloud index
+      let remainingResumes = [...index];
+      if (typeof fetchAllResumesFromCloud === "function") {
+        try {
+          const cloudIndex = await fetchAllResumesFromCloud();
+          // Filter out the deleted resume
+          const cloudIndexFiltered = cloudIndex.filter(item => item.id !== id);
+          cloudIndexFiltered.forEach(cItem => {
+            if (!remainingResumes.some(r => r.id === cItem.id)) {
+              remainingResumes.push(cItem);
+            }
+          });
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      if (remainingResumes.length > 0) {
         // Load the next latest resume
-        index.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-        const nextId = index[0].id;
+        remainingResumes.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+        const nextId = remainingResumes[0].id;
         const newUrl = `${window.location.origin}${window.location.pathname}?id=${nextId}`;
         window.history.replaceState({ path: newUrl }, '', newUrl);
         loadCloudResume(nextId);
@@ -2484,7 +2554,7 @@ function deleteResumeDraft(id, title) {
       }
     } else {
       // Re-render dashboard
-      renderResumesDashboardList();
+      await renderResumesDashboardList();
     }
   }
 }

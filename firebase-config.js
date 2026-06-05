@@ -140,3 +140,63 @@ async function loadResumeFromCloud(resumeId) {
     return parsedLocal;
   }
 }
+
+/**
+ * Fetches all resumes from Firestore.
+ * @returns {Promise<Array>} List of resumes with their IDs and metadata
+ */
+async function fetchAllResumesFromCloud() {
+  if (!isFirebaseConnected || !db) {
+    console.warn("Firebase not connected. Cannot fetch resumes from cloud.");
+    return [];
+  }
+  try {
+    const querySnapshot = await db.collection("resumes").get();
+    const resumes = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      let updatedAtVal = new Date().toISOString();
+      if (data.updatedAt) {
+        if (typeof data.updatedAt.toDate === "function") {
+          updatedAtVal = data.updatedAt.toDate().toISOString();
+        } else {
+          updatedAtVal = new Date(data.updatedAt).toISOString();
+        }
+      } else if (data.createdAt) {
+        if (typeof data.createdAt.toDate === "function") {
+          updatedAtVal = data.createdAt.toDate().toISOString();
+        } else {
+          updatedAtVal = new Date(data.createdAt).toISOString();
+        }
+      }
+      resumes.push({
+        id: doc.id,
+        title: data.resumeTitle || "Untitled resume",
+        updatedAt: updatedAtVal
+      });
+    });
+    return resumes;
+  } catch (error) {
+    console.error("Failed to fetch resumes from Firestore:", error);
+    return [];
+  }
+}
+
+/**
+ * Deletes a resume from Firestore.
+ * @param {string} resumeId 
+ * @returns {Promise<boolean>} True if successful
+ */
+async function deleteResumeFromCloud(resumeId) {
+  if (!isFirebaseConnected || !db || !resumeId || resumeId.startsWith("local_")) {
+    return false;
+  }
+  try {
+    await db.collection("resumes").doc(resumeId).delete();
+    console.log("Deleted resume from Firestore:", resumeId);
+    return true;
+  } catch (error) {
+    console.error("Failed to delete resume from Firestore:", error);
+    return false;
+  }
+}
