@@ -3078,5 +3078,700 @@ body.export-active {
   gap: 2px !important;
 }
 
+/* Hide header contact container and helper breaks by default */
+.header-contact-container,
+.header-contact-break {
+  display: none;
+}
+
+/* ==========================================================================
+   21. Layout Template - Header Split Column (layout-split-header) overrides
+   ========================================================================== */
+.layout-split-header .resume-container {
+  display: grid !important;
+  grid-template-areas:
+    "banner banner"
+    "sidebar main" !important;
+  grid-template-columns: 32% 68% !important;
+  grid-template-rows: auto 1fr !important;
+  height: 100% !important;
+  width: 100% !important;
+  background-color: white !important;
+  font-family: 'Inter', sans-serif !important;
+  
+  /* Color Palette Variables */
+  --primary-color: #1E3A5F !important; /* Deep Navy */
+  --sidebar-bg: #F5F7FA !important;    /* Light Background */
+  --resume-text-dark: #2B2B2B !important;
+  --resume-text-light: #2B2B2B !important;
+  --resume-divider: #cbd5e1 !important;
+}
+
+.layout-split-header .resume-sidebar {
+  display: contents !important;
+}
+
+.layout-split-header .sidebar-header-curve {
+  grid-area: banner !important;
+  position: relative !important;
+  height: auto !important;
+  width: 100% !important;
+  background-color: white !important;
+  padding: 30px 40px 14px 40px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  border-bottom: none !important; /* Removed full-width divider line */
+  text-align: left !important; /* Force left alignment */
+}
+
+.layout-split-header .sidebar-photo-wrapper {
+  grid-area: banner !important;
+  justify-self: end !important;
+  align-self: center !important;
+  position: relative !important;
+  margin-right: 40px !important;
+  margin-top: -5px !important; /* Adjusted position slightly downwards */
+  margin-bottom: -75px !important; /* Adjusted hanging bottom overlay */
+  height: auto !important;
+  z-index: 100 !important; /* Stand above everything */
+  display: flex !important;
+}
+
+.layout-split-header .circular-photo-container {
+  position: static !important;
+  width: 210px !important; /* Significantly increased photo size to match the red mark */
+  height: 210px !important;
+  border: 3px solid #2CA6A4 !important; /* Thicker teal accent border for premium feel */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.layout-split-header .sidebar-footer-curve,
+.layout-split-header .curved-bg {
+  display: none !important;
+}
+
+.layout-split-header .sidebar-body {
+  grid-area: sidebar !important;
+  background-color: #F5F7FA !important; /* Light background */
+  padding: 30px 20px 24px 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 36px !important; /* Increased gap to spread sections and fill column */
+  width: 100% !important; /* Utilise full sidebar space */
+  height: 100% !important;
+  border-right: 1px solid #e2e8f0 !important;
+  box-sizing: border-box !important;
+}
+
+.layout-split-header .personal-details-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important; /* Spaced out contact details */
+}
+
+/* Sidebar section ordering: Contact info first, Technical Skills second, Soft Skills third, Languages fourth */
+.layout-split-header .sidebar-body > .sidebar-section:first-child {
+  order: 1 !important;
+}
+.layout-split-header #preview-section-tech-skills {
+  order: 2 !important;
+}
+.layout-split-header #preview-section-skills {
+  order: 3 !important;
+}
+.layout-split-header #preview-section-languages {
+  order: 4 !important;
+}
+.layout-split-header #preview-section-hobbies {
+  order: 5 !important;
+}
+
+.layout-split-header .resume-main {
+  grid-area: main !important;
+  width: 100% !important; /* Utilise full right column space */
+  height: 100% !important;
+  padding: 10px 24px 24px 24px !important;
+  background-color: white !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 15px !important; /* Reduced gap between sections */
+  box-sizing: border-box !important;
+}
+
+/* Name and Subtitle Headline Styling */
+.layout-split-header .name-headline-block {
+  width: 100% !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
+.layout-split-header .candidate-name {
+  color: #1E3A5F !important; /* Deep Navy */
+  font-size: 25px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.5px !important;
+  line-height: 1.2 !important;
+  margin-bottom: 4px !important;
+  text-transform: uppercase !important;
+  text-align: left !important;
+}
+
+.layout-split-header .candidate-headline {
+  color: #2CA6A4 !important; /* Teal Accent */
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.8px !important;
+  text-transform: uppercase !important;
+  margin-top: 1px !important;
+  margin-bottom: 6px !important;
+  text-align: left !important;
+}
+
+/* Header Contact List layout - One Clean Line */
+.layout-split-header .header-contact-container {
+  display: block !important;
+  width: 100% !important;
+  max-width: 70% !important; /* Stop the border line before the photo wrapper */
+  border-bottom: 1px solid #e2e8f0 !important; /* Divider line placed here instead of banner curve */
+  padding-bottom: 14px !important;
+  box-sizing: border-box !important;
+}
+
+.layout-split-header .header-contact-line {
+  display: none !important; /* Hide accent line cutting through photo */
+}
+
+.layout-split-header .header-contact-list {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 4px 0px !important;
+  width: 100% !important;
+}
+
+.layout-split-header .detail-item-header {
+  display: inline-flex !important;
+  align-items: center !important;
+  font-size: 9.5px !important; /* Compact size to fit on one line */
+  color: #2B2B2B !important;
+}
+
+.layout-split-header .detail-item-header i {
+  color: #2CA6A4 !important; /* Teal icons */
+  margin-right: 5px !important;
+  font-size: 10px !important;
+}
+
+.layout-split-header .detail-item-header::after {
+  content: "|";
+  margin-left: 8px;
+  margin-right: 8px;
+  color: #94a3b8 !important;
+}
+
+.layout-split-header .header-contact-break {
+  display: block !important;
+  flex-basis: 100% !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.layout-split-header #preview-item-linkedin-header,
+.layout-split-header #preview-item-github-header {
+  margin-top: 4px !important;
+}
+
+.layout-split-header #preview-item-phone-header::after,
+.layout-split-header #preview-item-github-header::after {
+  display: none !important;
+}
+
+.layout-split-header #preview-item-email-header::after,
+.layout-split-header #preview-item-linkedin-header::after {
+  display: inline !important;
+}
+
+.layout-split-header .detail-item-header.last-visible::after {
+  display: none !important;
+}
+
+/* Headings with FontAwesome icons */
+.layout-split-header .main-section-title,
+.layout-split-header .sidebar-title {
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  color: #1E3A5F !important; /* Deep Navy */
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  border-bottom: 1.5px solid #2CA6A4 !important; /* Thin teal line under headings */
+  padding-bottom: 5px !important;
+  margin-top: 5px !important;
+  margin-bottom: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.layout-split-header .sidebar-title::before,
+.layout-split-header .main-section-title::before {
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+  margin-right: 8px !important;
+  color: #2CA6A4 !important; /* Teal icons */
+  font-size: 12px !important;
+}
+
+.layout-split-header #preview-section-profile .main-section-title::before {
+  content: "\f2c2" !important; /* fa-id-card */
+}
+
+.layout-split-header #preview-section-employment-p1 .main-section-title::before,
+.layout-split-header #preview-section-employment-p2 .main-section-title::before {
+  content: "\f0b1" !important; /* fa-briefcase */
+}
+
+.layout-split-header #preview-section-education-p1 .main-section-title::before,
+.layout-split-header #preview-section-education-p2 .main-section-title::before {
+  content: "\f19d" !important; /* fa-graduation-cap */
+}
+
+.layout-split-header #preview-section-references .main-section-title::before {
+  content: "\f2c0" !important; /* fa-address-book */
+}
+
+.layout-split-header #preview-item-name {
+  display: none !important; /* Hide candidate name in the sidebar personal details list */
+}
+
+.layout-split-header .sidebar-section:first-of-type .sidebar-title::before {
+  content: "\f095" !important; /* fa-phone for CONTACT */
+}
+
+.layout-split-header #preview-section-skills .sidebar-title::before {
+  content: "\f0e7" !important; /* fa-bolt for SOFT SKILLS */
+}
+
+.layout-split-header #preview-section-tech-skills .sidebar-title::before {
+  content: "\f085" !important; /* fa-gears for TECHNICAL SKILLS */
+}
+
+.layout-split-header #preview-section-languages .sidebar-title::before {
+  content: "\f0ac" !important; /* fa-globe for LANGUAGES */
+}
+
+.layout-split-header #preview-section-hobbies .sidebar-title::before {
+  content: "\f004" !important; /* fa-heart for HOBBIES */
+}
+
+/* Profile Text Styling */
+.layout-split-header .main-section-content {
+  font-size: 10.8px !important;
+  line-height: 1.5 !important;
+  color: #2B2B2B !important;
+}
+
+/* Technical Skills Layout Styling - Categorized Inline Lists */
+.layout-split-header #preview-section-tech-skills ul {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important; /* Spaced out tech skill categories */
+  list-style: none !important;
+  padding: 0 !important;
+}
+
+.layout-split-header #preview-section-tech-skills ul li {
+  list-style-type: none !important;
+  padding-left: 0 !important;
+  margin-bottom: 4px !important;
+}
+
+.layout-split-header #preview-section-tech-skills ul li::before {
+  display: none !important; /* No bullets */
+}
+
+.layout-split-header #preview-section-tech-skills ul li strong {
+  display: inline-block !important;
+  color: #1E3A5F !important; /* Deep Navy */
+  font-size: 10.8px !important;
+  font-weight: 700 !important;
+  text-transform: capitalize !important;
+  margin-right: 4px !important;
+}
+
+.layout-split-header #preview-section-tech-skills ul li strong::after {
+  content: ":";
+}
+
+.layout-split-header #preview-section-tech-skills ul li .tech-skill-val {
+  display: inline !important;
+  font-size: 10.8px !important;
+  color: #2B2B2B !important; /* Dark Gray */
+}
+
+/* Soft Skills List Layout */
+.layout-split-header #preview-section-skills ul.skills-list-bullets {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important; /* Spaced out soft skills to match languages */
+  list-style: none !important;
+  padding: 0 !important;
+}
+
+.layout-split-header #preview-section-skills ul.skills-list-bullets li {
+  list-style-type: none !important;
+  padding-left: 0 !important;
+  position: relative !important;
+  font-size: 10.8px !important;
+  font-weight: 700 !important; /* Bold like languages */
+  color: #1E3A5F !important; /* Deep Navy like languages */
+}
+
+.layout-split-header #preview-section-skills ul.skills-list-bullets li::before {
+  display: none !important; /* Hide bullets */
+}
+
+/* Languages List Layout - Clean Text without Dots */
+.layout-split-header .languages-preview-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important; /* Spaced out languages */
+}
+
+.layout-split-header .lang-preview-item {
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: baseline !important;
+  margin-bottom: 0 !important; /* Spacing handled by container gap */
+  width: 100% !important;
+}
+
+.layout-split-header .lang-info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1px !important;
+}
+
+.layout-split-header .lang-name {
+  font-size: 10.8px !important;
+  font-weight: 700 !important;
+  color: #1E3A5F !important;
+}
+
+.layout-split-header .lang-level {
+  font-size: 9.5px !important;
+  color: #2B2B2B !important;
+}
+
+.layout-split-header #preview-section-languages .rating-dots {
+  display: none !important; /* Hide rating dots for a clean, minimal text look */
+}
+
+/* Projects Cards Layout - Elegant border, white background and subtle hover transitions */
+.layout-split-header .timeline-list {
+  gap: 10px !important;
+}
+
+.single-page.layout-split-header .timeline-list {
+  gap: 6px !important;
+}
+
+/* Projects Cards Layout - Elegant borderless unboxed layout with tight spacing */
+.layout-split-header #preview-section-employment-p1 .timeline-item,
+.layout-split-header #preview-section-employment-p2 .timeline-item {
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  margin-bottom: 0 !important;
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+  grid-template-rows: auto auto !important;
+  row-gap: 3px !important;
+  transition: none !important;
+}
+
+.layout-split-header #preview-section-employment-p1 .timeline-item:hover,
+.layout-split-header #preview-section-employment-p2 .timeline-item:hover {
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.layout-split-header .timeline-header {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.layout-split-header .job-company {
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  color: #1E3A5F !important; /* Deep Navy */
+}
+
+.layout-split-header .job-dates {
+  display: none !important; /* Hide dates for projects in this layout, as shown in the screenshot */
+}
+
+.layout-split-header .job-title {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  color: #2CA6A4 !important; /* Teal Accent */
+  text-align: right !important;
+  align-self: center !important;
+}
+
+.layout-split-header .job-bullets {
+  grid-column: 1 / span 2 !important;
+  grid-row: 2 !important;
+  margin-top: 4px !important;
+  padding-left: 14px !important;
+  list-style: disc !important;
+}
+
+.layout-split-header .job-bullets li {
+  font-size: 10.5px !important;
+  line-height: 1.4 !important;
+  color: #2B2B2B !important; /* Dark Gray */
+}
+
+/* Education Timeline Layout - Clean and Compact aligned list */
+.layout-split-header #preview-section-education-p1 .timeline-list,
+.layout-split-header #preview-section-education-p2 .timeline-list {
+  gap: 16px !important; /* Small gap between different school sections */
+}
+
+.single-page.layout-split-header #preview-section-education-p1 .timeline-list,
+.single-page.layout-split-header #preview-section-education-p2 .timeline-list {
+  gap: 10px !important;
+}
+
+.layout-split-header #preview-section-education-p1 .timeline-item,
+.layout-split-header #preview-section-education-p2 .timeline-item {
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+  grid-template-areas:
+    "degree dates"
+    "school school"
+    "desc desc" !important;
+  row-gap: 3px !important;
+  column-gap: 15px !important;
+  margin-bottom: 0 !important;
+}
+
+.layout-split-header #preview-section-education-p1 .job-title,
+.layout-split-header #preview-section-education-p2 .job-title {
+  grid-area: degree !important;
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  color: #1E3A5F !important;
+  text-align: left !important;
+  align-self: center !important;
+}
+
+.layout-split-header #preview-section-education-p1 .job-dates,
+.layout-split-header #preview-section-education-p2 .job-dates {
+  grid-area: dates !important;
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  color: #2CA6A4 !important; /* Teal Accent Date */
+  display: block !important;
+  text-align: right !important;
+  align-self: center !important;
+}
+
+.layout-split-header #preview-section-education-p1 .timeline-header,
+.layout-split-header #preview-section-education-p2 .timeline-header {
+  display: contents !important; /* Allows children (school, dates) to participate directly in the parent grid */
+}
+
+.layout-split-header #preview-section-education-p1 .job-company,
+.layout-split-header #preview-section-education-p2 .job-company {
+  grid-area: school !important;
+  font-size: 10.5px !important;
+  font-weight: 500 !important;
+  color: #2B2B2B !important;
+}
+
+.layout-split-header #preview-section-education-p1 .job-bullets,
+.layout-split-header #preview-section-education-p2 .job-bullets {
+  grid-area: desc !important;
+  margin-top: 2px !important;
+  padding-left: 0 !important;
+  list-style: none !important;
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+  color: #2B2B2B !important;
+}
+
+.layout-split-header .edu-modules-label {
+  color: #1E3A5F !important; /* Deep Navy */
+  font-weight: 700 !important;
+  display: block !important;
+  margin-bottom: 2px !important;
+}
+
+/* References Section Compact layout */
+.layout-split-header #preview-section-references .reference-item {
+  font-size: 10.5px !important;
+  color: #2B2B2B !important;
+}
+
+/* Single Page compressed rules for Header Split layout */
+.single-page.layout-split-header .resume-container {
+  grid-template-rows: auto 1fr !important;
+}
+
+.single-page.layout-split-header .sidebar-header-curve {
+  padding: 20px 30px 8px 30px !important;
+}
+
+.single-page.layout-split-header .sidebar-body {
+  padding: 20px 14px 20px 14px !important;
+  gap: 16px !important;
+}
+
+.single-page.layout-split-header .resume-main {
+  padding: 10px 20px 20px 20px !important;
+  gap: 16px !important;
+}
+
+.single-page.layout-split-header .sidebar-photo-wrapper {
+  margin-top: -5px !important;
+  margin-bottom: -40px !important;
+}
+
+.single-page.layout-split-header .circular-photo-container {
+  width: 150px !important;
+  height: 150px !important;
+}
+
+.single-page.layout-split-header #preview-section-skills ul.skills-list-bullets {
+  gap: 10px !important;
+}
+
+.single-page.layout-split-header .languages-preview-container {
+  gap: 10px !important;
+}
+
+.single-page.layout-split-header .lang-preview-item {
+  margin-bottom: 0 !important;
+}
+
+.single-page.layout-split-header .personal-details-list {
+  gap: 10px !important;
+}
+
+.single-page.layout-split-header #preview-section-tech-skills ul {
+  gap: 8px !important;
+}
+
+/* ==========================================================================
+   22. Print and Export Overrides for layout-split-header
+   ========================================================================== */
+@media print {
+  .layout-split-header .resume-container {
+    display: grid !important;
+    grid-template-areas:
+      "banner banner"
+      "sidebar main" !important;
+    grid-template-columns: 32% 68% !important;
+    grid-template-rows: auto 1fr !important;
+    height: 100% !important;
+    width: 100% !important;
+    background-color: white !important;
+  }
+
+  .layout-split-header .resume-sidebar {
+    display: contents !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    flex: none !important;
+  }
+
+  .layout-split-header .sidebar-header-curve {
+    grid-area: banner !important;
+    display: flex !important;
+  }
+
+  .layout-split-header .sidebar-photo-wrapper {
+    grid-area: banner !important;
+    display: flex !important;
+  }
+
+  .layout-split-header .sidebar-body {
+    grid-area: sidebar !important;
+    display: flex !important;
+    width: 100% !important;
+  }
+
+  .layout-split-header .resume-main {
+    grid-area: main !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    flex: none !important;
+  }
+}
+
+/* HTML2PDF / Export mode overrides for layout-split-header */
+.export-mode.layout-split-header .resume-container {
+  display: grid !important;
+  grid-template-areas:
+    "banner banner"
+    "sidebar main" !important;
+  grid-template-columns: 32% 68% !important;
+  grid-template-rows: auto 1fr !important;
+  height: 100% !important;
+  width: 100% !important;
+  background-color: white !important;
+}
+
+.export-mode.layout-split-header .resume-sidebar {
+  display: contents !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  flex: none !important;
+}
+
+.export-mode.layout-split-header .sidebar-header-curve {
+  grid-area: banner !important;
+  display: flex !important;
+}
+
+.export-mode.layout-split-header .sidebar-photo-wrapper {
+  grid-area: banner !important;
+  display: flex !important;
+}
+
+.export-mode.layout-split-header .sidebar-body {
+  grid-area: sidebar !important;
+  display: flex !important;
+  width: 100% !important;
+}
+
+.export-mode.layout-split-header .resume-main {
+  grid-area: main !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  flex: none !important;
+}
+
 
 

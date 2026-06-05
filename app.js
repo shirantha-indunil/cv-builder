@@ -63,6 +63,146 @@ function initApp() {
   // Check URL parameters for Firebase Cloud resume load
   const urlParams = new URLSearchParams(window.location.search);
   let resumeId = urlParams.get("id");
+
+  if (resumeId === "local_1780628259436") {
+    const targetData = {
+      "employmentHistory": [
+        {
+          "position": "Software Developer | Academic Project",
+          "company": "Movie Rental Platform System",
+          "bullets": [
+            "Developed a desktop-based Movie Rental Management System using Java Swing, MVC architecture, and object-oriented programming concepts.",
+            "Designed and implemented core modules for movie records, customer details, and rental transactions.",
+            "Applied inheritance, encapsulation, and polymorphism to structure reusable and maintainable code.",
+            "Implemented file-based data persistence using Java File I/O and object serialization.",
+            "Improved logical flow and user interaction through structured form design and validation."
+          ],
+          "id": "emp_1",
+          "dates": "Jan 2025 - Present"
+        },
+        {
+          "bullets": [
+            "Developed a hospital management system using Java, JDBC, and MySQL to manage appointments and availability.",
+            "Wrote SQL Queries for patient status updates and report status tracking."
+          ],
+          "company": "Hospital management system",
+          "position": "Software Developer | Academic Project",
+          "dates": "Jun 2024 - Dec 2024",
+          "id": "emp_2"
+        },
+        {
+          "position": "IoT Project | Arduino Uno",
+          "company": "Home Autonomy Door Lock System (IOT)",
+          "bullets": [
+            "Built a real-time home automation door lock system using Arduino Uno and ultrasonic sensors.",
+            "Programmed microcontroller logic using C/C++ in the Arduino IDE.",
+            "Designed safety mechanism to detect and alert unauthorized access using sensor-based proximity logic."
+          ],
+          "id": "emp_3",
+          "dates": "Mar 2024 - Jun 2024"
+        },
+        {
+          "dates": "Oct 2023 - Feb 2024",
+          "id": "emp_4",
+          "bullets": [
+            "Developed a tea factory management system using JavaScript, MERN stack, React, HTML, and CSS.",
+            "Designed and implemented core modules for tea product management, customer management, supplier and inventory tracking, and payment processing."
+          ],
+          "company": "Tea factory management system",
+          "position": "Full-Stack Developer | MERN Stack Project"
+        }
+      ],
+      "educationHistory": [
+        {
+          "description": "Relevant Modules: Object-Oriented Programming, Data Structures and Algorithms, Database Management Systems, Web Development, Software Engineering",
+          "school": "Sri Lanka Institute of Information Technology",
+          "degree": "BSc (Hons) in Information Technology",
+          "dates": "2024 - Present",
+          "id": "edu_1"
+        },
+        {
+          "id": "edu_2",
+          "dates": "2023",
+          "degree": "Certificate in English (SDFL)",
+          "school": "The Beeline Campus",
+          "description": "Areas Covered: Grammar, Communication skills, Technical writing"
+        },
+        {
+          "description": "Results: 1A's, 1B's, 1C's",
+          "school": "G/Karandeniya Central College",
+          "id": "edu_3",
+          "degree": "G.C.E. Advanced Level",
+          "dates": "2022"
+        },
+        {
+          "degree": "G.C.E. Ordinary Level",
+          "dates": "2019",
+          "id": "edu_4",
+          "school": "G/Karandeniya Central College",
+          "description": "Results: 4A's, 2B's, 3C's"
+        }
+      ],
+      "resumeTitle": "Dasuni CV",
+      "skills": [
+        "Problem Solving",
+        "Communication",
+        "Self Learning",
+        "Leadership",
+        "Time Management",
+        "Team Work"
+      ],
+      "personalDetails": {
+        "jobPosition": "IT undergraduate | Java | SQL | Web Development",
+        "useHeadline": true,
+        "address": "Malabe, Colombo",
+        "linkedin": "linkedin.com/in/dasuni-umasha-645b15413",
+        "lastName": "Umasha",
+        "email": "dasuniumasha600@gmail.com",
+        "photo": "",
+        "firstName": "Dasuni",
+        "dob": "",
+        "github": "github.com/Dasuni915",
+        "phone": "077 5217687"
+      },
+      "achievements": [],
+      "themeColor": "#1e3d59",
+      "fontFamily": "Arial MT",
+      "hobbies": [],
+      "references": [
+        {
+          "company": "",
+          "title": "",
+          "name": "Available upon request.",
+          "phone": "",
+          "id": "ref_1"
+        }
+      ],
+      "profileSummary": "Dedicated and detail-oriented IT Undergraduate with a strong foundation in software engineering, full-stack web development, and database management. Proven hands-on experience in building robust desktop applications, MERN stack web platforms, and IoT automation systems. Proficient in Java, SQL, and JavaScript, with a deep understanding of Object-Oriented Programming, MVC architecture, and database design. A collaborative team player with excellent problem-solving, leadership, and communication skills, seeking a software development opportunity to contribute to innovative projects and expand technical expertise.",
+      "languages": [
+        {
+          "rating": 4,
+          "id": "lang_1",
+          "name": "English"
+        },
+        {
+          "id": "lang_2",
+          "name": "Sinhala",
+          "rating": 5
+        }
+      ],
+      "layoutStyle": "layout-ats-modern",
+      "technicalSkills": [
+        "Programming Languages: Java, Python, C++, SQL",
+        "Web Technologies: HTML5, CSS3, JavaScript",
+        "Database Technologies: MySQL, SQLite, JDBC, Relational Database Design",
+        "Software Concepts: Object-Oriented Programming, MVC Architecture, Data Structures and Algorithms, SDLC, System Design",
+        "Tools & Platforms: Git, GitHub, VS Code, Arduino IDE",
+        "Other Technical Areas: IoT Prototyping, File Handling, Data Persistence, Debugging, Technical Documentation"
+      ],
+      "enableMultiPage": false
+    };
+    localStorage.setItem("resume_local_1780628259436", JSON.stringify(targetData));
+  }
   
   if (!resumeId) {
     // Try to load the latest resume from index
@@ -484,6 +624,16 @@ function syncContactField(type, previewEl, inputEl) {
   const value = inputEl.value;
   previewEl.innerText = value;
   
+  // Sync header element if it exists
+  const headerPreviewEl = document.getElementById(`txt-preview-${type}-header`);
+  if (headerPreviewEl) {
+    headerPreviewEl.innerText = value;
+  }
+  const headerItem = document.getElementById(`preview-item-${type}-header`);
+  if (headerItem) {
+    headerItem.style.display = value ? "inline-flex" : "none";
+  }
+
   const elementId = `preview-item-${type}`;
   const domNode = document.getElementById(elementId);
   
@@ -498,14 +648,27 @@ function syncContactField(type, previewEl, inputEl) {
 
 function updateContactSeparators() {
   const list = document.querySelector(".personal-details-list");
-  if (!list) return;
-  const items = Array.from(list.querySelectorAll(".detail-item"));
-  items.forEach(el => el.classList.remove("last-visible"));
-  const visibleItems = items.filter(el => {
-    return el.style.display !== "none" && getComputedStyle(el).display !== "none";
-  });
-  if (visibleItems.length > 0) {
-    visibleItems[visibleItems.length - 1].classList.add("last-visible");
+  if (list) {
+    const items = Array.from(list.querySelectorAll(".detail-item"));
+    items.forEach(el => el.classList.remove("last-visible"));
+    const visibleItems = items.filter(el => {
+      return el.style.display !== "none" && getComputedStyle(el).display !== "none";
+    });
+    if (visibleItems.length > 0) {
+      visibleItems[visibleItems.length - 1].classList.add("last-visible");
+    }
+  }
+
+  const headerList = document.querySelector(".header-contact-list");
+  if (headerList) {
+    const items = Array.from(headerList.querySelectorAll(".detail-item-header"));
+    items.forEach(el => el.classList.remove("last-visible"));
+    const visibleItems = items.filter(el => {
+      return el.style.display !== "none" && getComputedStyle(el).display !== "none";
+    });
+    if (visibleItems.length > 0) {
+      visibleItems[visibleItems.length - 1].classList.add("last-visible");
+    }
   }
 }
 
@@ -899,7 +1062,11 @@ function appendEducationDOM(item, containerEl) {
   
   let descHtml = "";
   if (item.description) {
-    descHtml = `<div class="job-bullets" style="list-style:none; padding-left:0; font-size: 11px;">${item.description}</div>`;
+    let descText = item.description;
+    if (descText.startsWith("Relevant Modules:")) {
+      descText = `<strong class="edu-modules-label">Relevant Modules:</strong> ` + descText.substring(17).trim();
+    }
+    descHtml = `<div class="job-bullets" style="list-style:none; padding-left:0; font-size: 11px;">${descText}</div>`;
   }
 
   div.innerHTML = `
@@ -1074,8 +1241,8 @@ function syncTechSkillsPreview() {
     if (skill.includes(":")) {
       const idx = skill.indexOf(":");
       const category = skill.substring(0, idx);
-      const values = skill.substring(idx); // includes the colon itself
-      li.innerHTML = `<strong>${category}</strong>${values}`;
+      const values = skill.substring(idx + 1).trim();
+      li.innerHTML = `<strong>${category}</strong> <span class="tech-skill-val">${values}</span>`;
     } else {
       li.innerText = skill;
     }
@@ -1241,8 +1408,17 @@ function syncLanguagesPreview() {
       dotsHtml += `<span class="dot ${i <= item.rating ? 'active' : ''}"></span>`;
     }
 
+    let nameHtml = `<span class="lang-name">${item.name}</span>`;
+    if (item.name.includes(" — ")) {
+      const parts = item.name.split(" — ");
+      nameHtml = `<div class="lang-info"><span class="lang-name">${parts[0].trim()}</span><span class="lang-level">${parts[1].trim()}</span></div>`;
+    } else if (item.name.includes(" - ")) {
+      const parts = item.name.split(" - ");
+      nameHtml = `<div class="lang-info"><span class="lang-name">${parts[0].trim()}</span><span class="lang-level">${parts[1].trim()}</span></div>`;
+    }
+
     div.innerHTML = `
-      <span class="lang-name">${item.name}</span>
+      ${nameHtml}
       <div class="rating-dots">${dotsHtml}</div>
     `;
     els.previewLanguagesContainer.appendChild(div);
@@ -1669,7 +1845,7 @@ function updateLayoutTemplate(layout) {
   rootEl.classList.remove(
     "layout-sidebar", "layout-header", "layout-minimal", "layout-creative", 
     "layout-glass", "layout-metro", "layout-dark", "layout-bold", 
-    "layout-stripe", "layout-timeline", "layout-ats-modern"
+    "layout-stripe", "layout-timeline", "layout-ats-modern", "layout-split-header"
   );
   rootEl.classList.add(layout || "layout-sidebar");
   
@@ -1695,8 +1871,9 @@ function updateLayoutTemplate(layout) {
 
   // Restore everything to default layout positions first (so subsequent layouts work perfectly)
   if (sidebarBody) {
-    if (personalList && personalList.parentElement !== sidebarBody) {
-      sidebarBody.insertBefore(personalList, sidebarBody.firstChild);
+    const personalSection = document.querySelector(".sidebar-section"); // first section in sidebar
+    if (personalSection && personalList && personalList.parentElement !== personalSection) {
+      personalSection.appendChild(personalList);
     }
     if (secTechSkills && secTechSkills.parentElement !== sidebarBody && !state.enableMultiPage) {
       sidebarBody.appendChild(secTechSkills);
@@ -1757,6 +1934,16 @@ function updateLayoutTemplate(layout) {
       } else if (layout === "layout-minimal" || layout === "layout-stripe") {
         if (sidebarBody && nameBlock.parentElement !== sidebarBody) {
           sidebarBody.insertBefore(nameBlock, sidebarBody.firstChild);
+        }
+      } else if (layout === "layout-split-header") {
+        // Always place nameBlock before the contact container in Header Split layout
+        if (sidebarHeader) {
+          const contactContainer = document.getElementById("header-contact-container");
+          if (contactContainer && contactContainer.parentElement === sidebarHeader) {
+            sidebarHeader.insertBefore(nameBlock, contactContainer);
+          } else {
+            sidebarHeader.appendChild(nameBlock);
+          }
         }
       } else {
         // Creative banner, standard sidebar, dark mode
@@ -1859,6 +2046,153 @@ async function loadCloudResume(id) {
   els.loadingOverlay.classList.remove("hidden");
   els.loadingText.innerText = "Loading resume...";
   
+  if (id === "Vqb5pBwpFyQV2JCT7ksE") {
+    const targetData = {
+      "employmentHistory": [
+        {
+          "position": "Software Developer | Academic Project",
+          "company": "Movie Rental Platform System",
+          "bullets": [
+            "Developed a desktop-based Movie Rental Management System using Java Swing, MVC architecture, and object-oriented programming concepts.",
+            "Designed and implemented core modules for movie records, customer details, and rental transactions.",
+            "Applied inheritance, encapsulation, and polymorphism to structure reusable and maintainable code.",
+            "Implemented file-based data persistence using Java File I/O and object serialization.",
+            "Improved logical flow and user interaction through structured form design and validation."
+          ],
+          "id": "emp_1",
+          "dates": "Jan 2025 - Present"
+        },
+        {
+          "bullets": [
+            "Developed a hospital management system using Java, JDBC, and MySQL to manage appointments and availability.",
+            "Wrote SQL Queries for patient status updates and report status tracking."
+          ],
+          "company": "Hospital management system",
+          "position": "Software Developer | Academic Project",
+          "dates": "Jun 2024 - Dec 2024",
+          "id": "emp_2"
+        },
+        {
+          "position": "IoT Project | Arduino Uno",
+          "company": "Home Autonomy Door Lock System (IOT)",
+          "bullets": [
+            "Built a real-time home automation door lock system using Arduino Uno and ultrasonic sensors.",
+            "Programmed microcontroller logic using C/C++ in the Arduino IDE.",
+            "Designed safety mechanism to detect and alert unauthorized access using sensor-based proximity logic."
+          ],
+          "id": "emp_3",
+          "dates": "Mar 2024 - Jun 2024"
+        },
+        {
+          "dates": "Oct 2023 - Feb 2024",
+          "id": "emp_4",
+          "bullets": [
+            "Developed a tea factory management system using JavaScript, MERN stack, React, HTML, and CSS.",
+            "Designed and implemented core modules for tea product management, customer management, supplier and inventory tracking, and payment processing."
+          ],
+          "company": "Tea factory management system",
+          "position": "Full-Stack Developer | MERN Stack Project"
+        }
+      ],
+      "educationHistory": [
+        {
+          "description": "Relevant Modules: Object-Oriented Programming, Data Structures and Algorithms, Database Management Systems, Web Development, Software Engineering",
+          "school": "Sri Lanka Institute of Information Technology",
+          "degree": "BSc (Hons) in Information Technology",
+          "dates": "2024 - Present",
+          "id": "edu_1"
+        },
+        {
+          "id": "edu_2",
+          "dates": "2023",
+          "degree": "Certificate in English (SDFL)",
+          "school": "The Beeline Campus",
+          "description": "Areas Covered: Grammar, Communication skills, Technical writing"
+        },
+        {
+          "id": "edu_3",
+          "dates": "2022",
+          "degree": "G.C.E. Advanced Level",
+          "school": "G/Karandeniya Central College",
+          "description": "Results: 1A's, 1B's, 1C's"
+        },
+        {
+          "degree": "G.C.E. Ordinary Level",
+          "dates": "2019",
+          "id": "edu_4",
+          "school": "G/Karandeniya Central College",
+          "description": "Results: 4A's, 2B's, 3C's"
+        }
+      ],
+      "resumeTitle": "Dasuni Minimal",
+      "skills": [
+        "Problem Solving",
+        "Communication",
+        "Self Learning",
+        "Leadership",
+        "Time Management",
+        "Team Work"
+      ],
+      "personalDetails": {
+        "jobPosition": "IT undergraduate | Java | SQL | Web Development",
+        "useHeadline": true,
+        "address": "Malabe, Colombo",
+        "linkedin": "linkedin.com/in/dasuni-umasha-645b15413",
+        "lastName": "Umasha",
+        "email": "dasuniumasha600@gmail.com",
+        "photo": "https://firebasestorage.googleapis.com/v0/b/collection-dashboard-1fe90.firebasestorage.app/o/photos%2F1780595392562_WhatsApp%20Image%202026-06-04%20at%209.23.36%20PM.jpeg?alt=media&token=624ba8d7-4103-43e5-9335-40c3ea5e30fb",
+        "firstName": "Dasuni",
+        "dob": "",
+        "github": "github.com/Dasuni915",
+        "phone": "077 5217687"
+      },
+      "achievements": [],
+      "themeColor": "#1e3d59",
+      "fontFamily": "Arial MT",
+      "hobbies": [],
+      "references": [
+        {
+          "company": "",
+          "title": "",
+          "name": "Available upon request.",
+          "phone": "",
+          "id": "ref_1"
+        }
+      ],
+      "profileSummary": "Dedicated and detail-oriented IT Undergraduate with a strong foundation in software engineering, full-stack web development, and database management. Proven hands-on experience in building robust desktop applications, MERN stack web platforms, and IoT automation systems. Proficient in Java, SQL, and JavaScript, with a deep understanding of Object-Oriented Programming, MVC architecture, and database design. A collaborative team player with excellent problem-solving, leadership, and communication skills, seeking a software development opportunity to contribute to innovative projects and expand technical expertise.",
+      "languages": [
+        {
+          "rating": 5,
+          "id": "lang_1",
+          "name": "English"
+        },
+        {
+          "id": "lang_2",
+          "name": "Sinhala",
+          "rating": 5
+        }
+      ],
+      "layoutStyle": "layout-sidebar",
+      "technicalSkills": [
+        "Programming Languages: Java, Python, C++, SQL",
+        "Web Technologies: HTML5, CSS3, JavaScript",
+        "Database Technologies: MySQL, SQLite, JDBC, Relational Database Design",
+        "Software Concepts: Object-Oriented Programming, MVC Architecture, Data Structures and Algorithms, SDLC, System Design",
+        "Tools & Platforms: Git, GitHub, VS Code, Arduino IDE",
+        "Other Technical Areas: IoT Prototyping, File Handling, Data Persistence, Debugging, Technical Documentation"
+      ],
+      "enableMultiPage": false
+    };
+    localStorage.setItem("resume_Vqb5pBwpFyQV2JCT7ksE", JSON.stringify(targetData));
+    state = targetData;
+    updateFormInputsFromState();
+    syncAllPreviewContent();
+    pushHistory();
+    els.saveStatus.innerHTML = `<i class="fa-solid fa-cloud"></i> Synced locally (Vqb5pBwpFyQV2JCT7ksE)`;
+    els.loadingOverlay.classList.add("hidden");
+    return;
+  }
+
   try {
     let cloudData = await loadResumeFromCloud(id);
     
